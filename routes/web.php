@@ -18,9 +18,21 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::view('/admin','login');
+Route::view('/admin/login','login');
+Route::post('/admin/login',[MainController::class,'login'])->name('login');
 
+Route::get('/admin/logout', function () {
+    if (Auth::guard('admin')->check()) {
 
-Route::group(['prefix' => 'admin'], function(){
+        // Auth::guard('uni')->user()->update(['is_logged_on' => 0]);
+
+        Auth::guard('admin')->logout();
+        return Redirect("/admin/login");
+    }
+});
+
+Route::group(['middleware' => 'auth:admin', 'prefix' => 'admin'], function(){
 
     // Route::view('/dashboard','admin.dashboard')->name('admin.dashboard');
     Route::get('/dashboard',[MainController::class,'dashboard'])->name('dashboard');

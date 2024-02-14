@@ -17,7 +17,10 @@ class AdminSeeder extends Seeder
         //
         Admin::create([
             'username' => 'luxhouseinc',
-            'password' => Hash::make('te196986')
+            'password' => Hash::make('te196986'),
+            'email' => 'admin@towel-ng.com',
+            'image' => 'admin.png',
+            'designation' => 'Super Admin',
         ]);
     }
 }
