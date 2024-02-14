@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Star Admin Premium Laravel Admin Dashboard Template</title>
+  <title>Towel Admin Dashboard</title>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -14,14 +14,28 @@
   <!-- plugin css -->
   {!! Html::style('assets/plugins/@mdi/font/css/materialdesignicons.min.css') !!}
   {!! Html::style('assets/plugins/perfect-scrollbar/perfect-scrollbar.css') !!}
+  {!! Html::style('assets/plugins/toastr/toastr.min.css') !!}
   <!-- end plugin css -->
 
   <!-- plugin css -->
   @stack('plugin-styles')
   <!-- end plugin css -->
 
+  <!-- show toast message -->
+  @if(Session::has('success'))
+    <script>
+      toastr.success("{{ Session::get('success') }}");
+    </script>
+  @endif
+
+  @if(Session::has('error'))
+    <script>
+      toastr.error("{{ Session::get('error') }}");
+    </script>
+  @endif
+
   <!-- common css -->
-  {!! Html::style('css/app.css') !!}
+    {!! Html::style('css/app.css') !!}
   <!-- end common css -->
 
   @stack('style')
@@ -36,6 +50,8 @@
 
     <!-- base js -->
     {!! Html::script('js/app.js') !!}
+    {!! Html::script('assets/plugins/toastr/toastr.min.js') !!}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
     <!-- end base js -->
 
     <!-- plugin js -->
