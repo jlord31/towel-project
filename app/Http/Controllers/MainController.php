@@ -28,16 +28,19 @@ class MainController extends Controller
         
         if (!$userlog || !Hash::check($req->password, $userlog->password)) 
         {
-            Toastr::error('Invalid username/password');
-            return redirect()->back()->withInput();
+            toastr()->error('Invalid username/password');
+            return back();
+
+            // Toastr::error('Authentication failed');
+            // return redirect()->back()->withInput();
         }
         else
         {
             $log_user_in = Auth::guard('admin')->attempt($credentials);
             if (!$log_user_in) 
             {
-                Toastr::error('Authentication failed');
-                return redirect()->back()->withInput();
+                toastr()->error('Authentication failed');
+                return back();
             } else 
             {
                 toastr()->success('Login Successful');

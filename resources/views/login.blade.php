@@ -1,4 +1,24 @@
 @extends('layout.master-mini')
+@push('plugin-styles')
+  <style>
+      
+    /* Override toastr styles */
+    .toast-success {
+        background-color: #28a745; /* Set the background color for success messages */
+        color: #fff; /* Set the text color for success messages */
+    }
+    .toast-warning {
+    color: #fff;
+    background-color: #f0ad4e;
+    }
+    .toast-error {
+        background-color: #dc3545; /* Set the background color for error messages */
+        color: #fff; /* Set the text color for error messages */
+    }
+
+  </style>
+@endpush
+
 @section('content')
 
 <div class="content-wrapper d-flex align-items-center justify-content-center auth theme-one" style="background-image: url({{ url('assets/images/auth/admin_login_page.jpeg') }}); background-size: cover;">
