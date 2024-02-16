@@ -21,6 +21,26 @@
   @stack('plugin-styles')
   <!-- end plugin css -->
 
+  @push('plugin-styles')
+    <style>
+        
+        /* Override toastr styles */
+        .toast-success {
+            background-color: #28a745; /* Set the background color for success messages */
+            color: #fff; /* Set the text color for success messages */
+        }
+        .toast-warning {
+        color: #fff;
+        background-color: #f0ad4e;
+        }
+        .toast-error {
+            background-color: #dc3545; /* Set the background color for error messages */
+            color: #fff; /* Set the text color for error messages */
+        }
+
+    </style>
+  @endpush
+
   <!-- show toast message -->
   @if(Session::has('success'))
     <script>
