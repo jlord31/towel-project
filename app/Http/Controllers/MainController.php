@@ -33,6 +33,7 @@ class MainController extends Controller
 
             // Toastr::error('Authentication failed');
             // return redirect()->back()->withInput();
+            
         }
         else
         {
