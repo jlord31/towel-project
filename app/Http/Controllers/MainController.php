@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
 
 use App\Models\Admin;
 
@@ -28,23 +29,20 @@ class MainController extends Controller
         
         if (!$userlog || !Hash::check($req->password, $userlog->password)) 
         {
-            toastr()->error('Invalid username/password');
+            Session::flash('error', 'Invalid username/password');
             return back();
-
-            // Toastr::error('Authentication failed');
-            // return redirect()->back()->withInput();
-            
         }
         else
         {
             $log_user_in = Auth::guard('admin')->attempt($credentials);
             if (!$log_user_in) 
             {
-                toastr()->error('Authentication failed');
+                Session::flash('error', 'Authentication failed');
                 return back();
             } else 
             {
-                toastr()->success('Login Successful');
+                
+                Session::flash('success', 'Login Successful');
                 return redirect()->route('dashboard');
                 $req->session()->put("admin_user",$userlog);
                 // return Redirect('admin/dashboard');
@@ -57,5 +55,37 @@ class MainController extends Controller
     function dashboard() 
     {
         return view("dashboard");
+    }
+
+    function changePasswordView()
+    {
+        return view("change-password");
+
+    }
+
+    function changePassword(Request $req)
+    {
+        if (Auth::guard('admin')->check()) 
+        {
+            $req->validate([
+                'password'=>'required|min:4|confirmed',
+                'password_confirmation'=>'required|min:4'
+            ]);
+
+            $new_password = Hash::make($req->password);
+
+            $userId = Auth::guard("admin")->user()->id;
+
+            $update_password = Admin::where('id', $userId)->update(['password' => $new_password]);
+
+            if($update_password)
+            {
+                return redirect()->back()->with('success', 'Password updated successfully');
+            }
+            else
+            {
+                return redirect()->back()->withErrors([ 'Unable to update password']);
+            }
+        }
     }
 }

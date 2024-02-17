@@ -37,9 +37,9 @@ Route::group(['middleware' => 'auth:admin', 'prefix' => 'admin'], function(){
     // Route::view('/dashboard','admin.dashboard')->name('admin.dashboard');
     Route::get('/dashboard',[MainController::class,'dashboard'])->name('dashboard');
 
-    Route::view('/change-password','admin.change-password');
-    Route::get('/change-password',[AdminUserController::class,'changePasswordView'])->name('admin.change-password');
-    Route::post('/change-password',[AdminUserController::class,'changePassword'])->name('admin.change-password');
+    Route::view('/change-password','change-password');
+    Route::get('/change-password',[MainController::class,'changePasswordView'])->name('change-password');
+    Route::post('/change-password',[MainController::class,'changePassword'])->name('change-password');
 
     // Route::view('/settings','admin.settings');
     Route::get('/settings',[AdminUserController::class,'SettingsView'])->name('admin.settings');
