@@ -40,30 +40,14 @@
       
   </div>
 
-
-  <script src="plugins/jquery/jquery.min.js"></script>
-  <!-- Bootstrap 4 -->
-  <script src="plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
-  <!-- AdminLTE App -->
-  <script src="dist/js/adminlte.min.js"></script>
-
-  <!-- base js -->
-  {!! Html::script('js/app.js') !!}
-  {!! Html::script('assets/plugins/perfect-scrollbar/perfect-scrollbar.min.js') !!}
-  <!-- end base js -->
+  <!-- common js -->
+  {!! Html::script('assets/plugins/jquery/jquery.min.js') !!}
+  {!! Html::script('assets/plugins/bootstrap/js/bootstrap.bundle.min.js') !!}
+  <!-- end common js -->
 
   <!-- plugin js -->
   @stack('plugin-scripts')
   <!-- end plugin js -->
-
-  <!-- common js -->
-  {!! Html::script('assets/js/off-canvas.js') !!}
-  {!! Html::script('assets/js/hoverable-collapse.js') !!}
-  {!! Html::script('assets/js/misc.js') !!}
-  {!! Html::script('assets/js/settings.js') !!}
-  {!! Html::script('assets/js/todolist.js') !!}
-  {!! Html::script('assets/plugins/toastr/toastr.min.js') !!}
-  <!-- end common js -->
 
   <!-- show toast message -->
   @if(Session::has('success'))
@@ -77,6 +61,10 @@
       toastr.error("{{ Session::get('error') }}");
     </script>
   @endif
+
+  
+  {!! Html::script('assets/dist/js/adminlte.min.js') !!}
+  {!! Html::script('assets/plugins/toastr/toastr.min.js') !!}
 
   @stack('custom-scripts')
 </body>

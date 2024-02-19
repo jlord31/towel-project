@@ -30,12 +30,18 @@ Route::get('/admin/logout', function () {
         Auth::guard('admin')->logout();
         return Redirect("/admin/login");
     }
-});
+})->name('logout');
 
 Route::group(['middleware' => 'auth:admin', 'prefix' => 'admin'], function(){
 
     // Route::view('/dashboard','admin.dashboard')->name('admin.dashboard');
     Route::get('/dashboard',[MainController::class,'dashboard'])->name('dashboard');
+
+    Route::get('/country',[MainController::class,'countryView'])->name('country');
+    Route::post('/country',[MainController::class,'saveNewCountry'])->name('country');
+
+    Route::get('/category',[MainController::class,'categoryView'])->name('category');
+    Route::post('/category',[MainController::class,'saveNewCategory'])->name('category');
 
     Route::view('/change-password','change-password');
     Route::get('/change-password',[MainController::class,'changePasswordView'])->name('change-password');

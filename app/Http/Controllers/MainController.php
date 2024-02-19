@@ -88,4 +88,24 @@ class MainController extends Controller
             }
         }
     }
+
+    function countryView() 
+    {
+        return view("country");
+    }
+
+    function saveNewCountry(Request $req) 
+    {
+        
+    }
+
+    function categoryView() 
+    {
+        return view("category");
+    }
+
+    function saveNewCategory(Request $req) 
+    {
+        
+    }
 }
