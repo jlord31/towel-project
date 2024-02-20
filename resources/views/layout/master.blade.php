@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Star Admin Pro Laravel Dashboard Template</title>
+  <title>Towel Admin Dashboard</title>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -9,52 +9,62 @@
   <!-- CSRF Token -->
   <meta name="_token" content="{{ csrf_token() }}">
   
-  <link rel="shortcut icon" href="{{ asset('/favicon.ico') }}">
+  <link rel="shortcut icon" href="{{ asset('images/logo.jpg') }}">
+
+  <!-- Google Font: Source Sans Pro -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
 
   <!-- plugin css -->
-  {!! Html::style('assets/plugins/@mdi/font/css/materialdesignicons.min.css') !!}
-  {!! Html::style('assets/plugins/perfect-scrollbar/perfect-scrollbar.css') !!}
+  {!! Html::style('assets/plugins/fontawesome-free/css/all.min.css') !!}
+  {!! Html::style('assets/dist/css/adminlte.min.css') !!}
+  {!! Html::style('assets/plugins/toastr/toastr.min.css') !!}
   <!-- end plugin css -->
+
 
   @stack('plugin-styles')
 
-  <!-- common css -->
-  {!! Html::style('css/app.css') !!}
-  <!-- end common css -->
 
   @stack('style')
 </head>
-<body data-base-url="{{url('/')}}">
+<body class="hold-transition sidebar-mini">
 
-  <div class="container-scroller" id="app">
+  <div class="wrapper">
+
     @include('layout.header')
-    <div class="container-fluid page-body-wrapper">
-      @include('layout.sidebar')
-      <div class="main-panel">
-        <div class="content-wrapper">
-          @yield('content')
-        </div>
-        @include('layout.footer')
-      </div>
-    </div>
+    
+    @include('layout.sidebar')
+      
+    @yield('content')
+        
+    @include('layout.footer')
+      
   </div>
 
-  <!-- base js -->
-  {!! Html::script('js/app.js') !!}
-  {!! Html::script('assets/plugins/perfect-scrollbar/perfect-scrollbar.min.js') !!}
-  <!-- end base js -->
+  <!-- common js -->
+  {!! Html::script('assets/plugins/jquery/jquery.min.js') !!}
+  {!! Html::script('assets/plugins/bootstrap/js/bootstrap.bundle.min.js') !!}
+  <!-- end common js -->
 
   <!-- plugin js -->
   @stack('plugin-scripts')
   <!-- end plugin js -->
 
-  <!-- common js -->
-  {!! Html::script('assets/js/off-canvas.js') !!}
-  {!! Html::script('assets/js/hoverable-collapse.js') !!}
-  {!! Html::script('assets/js/misc.js') !!}
-  {!! Html::script('assets/js/settings.js') !!}
-  {!! Html::script('assets/js/todolist.js') !!}
-  <!-- end common js -->
+  <!-- show toast message -->
+  @if(Session::has('success'))
+    <script>
+      toastr.success("{{ Session::get('success') }}");
+    </script>
+  @endif
+
+  @if(Session::has('error'))
+    <script>
+      toastr.error("{{ Session::get('error') }}");
+    </script>
+  @endif
+
+  
+  {!! Html::script('assets/dist/js/adminlte.min.js') !!}
+  {!! Html::script('assets/plugins/toastr/toastr.min.js') !!}
 
   @stack('custom-scripts')
 </body>

@@ -1,75 +1,57 @@
 @extends('layout.master-mini')
-@push('plugin-styles')
-  <style>
-      
-    /* Override toastr styles */
-    .toast-success {
-        background-color: #28a745; /* Set the background color for success messages */
-        color: #fff; /* Set the text color for success messages */
-    }
-    .toast-warning {
-    color: #fff;
-    background-color: #f0ad4e;
-    }
-    .toast-error {
-        background-color: #dc3545; /* Set the background color for error messages */
-        color: #fff; /* Set the text color for error messages */
-    }
-
-  </style>
-@endpush
 
 @section('content')
+<div class="login-box">
+    <!-- /.login-logo -->
+    <div class="card card-outline card-primary">
+        <div class="card-header text-center">
+            <a href="{{ route('login') }}" class="h1">
+                <img src="{{ url('images/logo.jpg') }}" style="height:50px; width:100px;" alt="logo" /> 
+            </a>
+        </div>
+        <div class="card-body">
+            <p class="login-box-msg">Sign in to start your session</p>
 
-<div class="content-wrapper d-flex align-items-center justify-content-center auth theme-one" style="background-image: url({{ url('assets/images/auth/admin_login_page.jpeg') }}); background-size: cover;">
-  <div class="row w-100">
-    <div class="col-lg-4 mx-auto">
-      <div class="auto-form-wrapper">
-        <form action="{{route('login')}}" method="POST">
-          @csrf
-          <div class="form-group">
-            <label class="label">Username</label>
-            <div class="input-group">
-              <input type="text" required class="form-control" name="username" placeholder="Username">
-              <div class="input-group-append">
-                <span class="input-group-text">
-                  <i class="mdi mdi-check-circle-outline"></i>
-                </span>
-              </div>
-            </div>
-          </div>
-          <div class="form-group">
-            <label class="label">Password</label>
-            <div class="input-group">
-              <input type="password" required class="form-control" name="password" placeholder="*********">
-              <div class="input-group-append">
-                <span class="input-group-text">
-                  <i class="mdi mdi-check-circle-outline"></i>
-                </span>
-              </div>
-            </div>
-          </div>
-          <div class="form-group">
-            <button class="btn btn-primary submit-btn btn-block">Login</button>
-          </div>
-          
-        </form>
-      </div>
-      <ul class="auth-footer">
-        <li>
-          <a href="#">Conditions</a>
-        </li>
-        <li>
-          <a href="#">Help</a>
-        </li>
-        <li>
-          <a href="#">Terms</a>
-        </li>
-      </ul>
-      <p class="footer-text text-center"> copyright &copy; <script> document.write(new Date().getFullYear()); </script> towel. All rights reserved. </p>
+            <form action="{{route('login')}}" method="POST">
+                @csrf
+                <div class="input-group mb-3">
+                    <input type="text" name="username" class="form-control" placeholder="username">
+                    <div class="input-group-append">
+                        <div class="input-group-text">
+                            <span class="fas fa-envelope"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="input-group mb-3">
+                    <input type="password" name="password" class="form-control" placeholder="Password">
+                    <div class="input-group-append">
+                        <div class="input-group-text">
+                            <span class="fas fa-lock"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-8">
+                        <div class="icheck-primary">
+                            <input type="checkbox" id="remember">
+                            <label for="remember">
+                                Remember Me
+                            </label>
+                        </div>
+                    </div>
+                    <!-- /.col -->
+                    <div class="col-4">
+                        <button type="submit" class="btn btn-primary btn-block">Sign In</button>
+                    </div>
+                    <!-- /.col -->
+                </div>
+            </form>
 
+            
+        </div>
+        <!-- /.card-body -->
     </div>
-  </div>
+    <!-- /.card -->
 </div>
-
+<!-- /.login-box -->
 @endsection

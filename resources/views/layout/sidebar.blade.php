@@ -1,123 +1,107 @@
-<nav class="sidebar sidebar-offcanvas dynamic-active-class-disabled" id="sidebar">
-  <ul class="nav">
-    <li class="nav-item nav-profile not-navigation-link">
-      <div class="nav-link">
-        <div class="user-wrapper">
-          <div class="profile-image">
-            @auth
-              <img src="{{ url('assets/uploads/admin/profile/' . Auth::user('admin_user')->image) }}" alt="profile image">
-            @endauth
-          </div>
-          <div class="text-wrapper">
-            <p class="profile-name">
-              @auth
-                {{ Auth::user('admin_user')->username }}
-              @endauth
-            </p>
-            <div class="dropdown" data-display="static">
-              <a href="#" class="nav-link d-flex user-switch-dropdown-toggler" id="UsersettingsDropdown" href="#" data-toggle="dropdown" aria-expanded="false">
-                <small class="designation text-muted">
-                  @auth
-                    {{ Auth::user('admin_user')->designation }}
-                  @endauth
-                </small>
-                <span class="status-indicator online"></span>
-              </a>
-              <div class="dropdown-menu" aria-labelledby="UsersettingsDropdown">
-                <a class="dropdown-item p-0">
-                  <div class="d-flex border-bottom">
-                    <div class="py-3 px-4 d-flex align-items-center justify-content-center">
-                      <i class="mdi mdi-bookmark-plus-outline mr-0 text-gray"></i>
-                    </div>
-                    <div class="py-3 px-4 d-flex align-items-center justify-content-center border-left border-right">
-                      <i class="mdi mdi-account-outline mr-0 text-gray"></i>
-                    </div>
-                    <div class="py-3 px-4 d-flex align-items-center justify-content-center">
-                      <i class="mdi mdi-alarm-check mr-0 text-gray"></i>
-                    </div>
-                  </div>
-                </a>
-                <a class="dropdown-item mt-2"> Manage Accounts </a>
-                <a class="dropdown-item"> Change Password </a>
-                <a class="dropdown-item"> Check Inbox </a>
-                <a class="dropdown-item"> Sign Out </a>
-              </div>
-            </div>
-          </div>
-        </div>
-        
-      </div>
-    </li>
-    <li class="nav-item {{ active_class(['/']) }}">
-      <a class="nav-link" href="{{ route('dashboard') }}">
-        <i class="menu-icon mdi mdi-television"></i>
-        <span class="menu-title">Dashboard</span>
-      </a>
-    </li>
-    <li class="nav-item {{ active_class(['basic-ui/*']) }}">
-      <a class="nav-link" data-toggle="collapse" href="#basic-ui" aria-expanded="{{ is_active_route(['basic-ui/*']) }}" aria-controls="basic-ui">
-        <i class="menu-icon mdi mdi-dna"></i>
-        <span class="menu-title">Basic UI Elements</span>
-        <i class="menu-arrow"></i>
-      </a>
-      <div class="collapse {{ show_class(['basic-ui/*']) }}" id="basic-ui">
-        <ul class="nav flex-column sub-menu">
-          <li class="nav-item {{ active_class(['basic-ui/buttons']) }}">
-            <a class="nav-link" href="{{ url('/basic-ui/buttons') }}">Buttons</a>
-          </li>
-          <li class="nav-item {{ active_class(['basic-ui/dropdowns']) }}">
-            <a class="nav-link" href="{{ url('/basic-ui/dropdowns') }}">Dropdowns</a>
-          </li>
-          <li class="nav-item {{ active_class(['basic-ui/typography']) }}">
-            <a class="nav-link" href="{{ url('/basic-ui/typography') }}">Typography</a>
-          </li>
-        </ul>
-      </div>
-    </li>
+<!-- Main Sidebar Container -->
+<aside class="main-sidebar sidebar-dark-primary elevation-4">
 
-    <li class="nav-item {{ active_class(['charts/chartjs']) }}">
-      <a class="nav-link" href="{{ url('/charts/chartjs') }}">
-        <i class="menu-icon mdi mdi-chart-line"></i>
-        <span class="menu-title">Charts</span>
-      </a>
-    </li>
-    <li class="nav-item {{ active_class(['tables/basic-table']) }}">
-      <a class="nav-link" href="{{ url('/tables/basic-table') }}">
-        <i class="menu-icon mdi mdi-table-large"></i>
-        <span class="menu-title">Tables</span>
-      </a>
-    </li>
-    <li class="nav-item {{ active_class(['icons/material']) }}">
-      <a class="nav-link" href="{{ url('/icons/material') }}">
-        <i class="menu-icon mdi mdi-emoticon"></i>
-        <span class="menu-title">Icons</span>
-      </a>
-    </li>
-    <li class="nav-item {{ active_class(['user-pages/*']) }}">
-      <a class="nav-link" data-toggle="collapse" href="#user-pages" aria-expanded="{{ is_active_route(['user-pages/*']) }}" aria-controls="user-pages">
-        <i class="menu-icon mdi mdi-lock-outline"></i>
-        <span class="menu-title">User Pages</span>
-        <i class="menu-arrow"></i>
-      </a>
-      <div class="collapse {{ show_class(['user-pages/*']) }}" id="user-pages">
-        <ul class="nav flex-column sub-menu">
-          <li class="nav-item {{ active_class(['user-pages/login']) }}">
-            <a class="nav-link" href="{{ url('/user-pages/login') }}">Login</a>
-          </li>
-          <li class="nav-item {{ active_class(['user-pages/register']) }}">
-            <a class="nav-link" href="{{ url('/user-pages/register') }}">Register</a>
-          </li>
-          <li class="nav-item {{ active_class(['user-pages/lock-screen']) }}">
-            <a class="nav-link" href="{{ url('/user-pages/lock-screen') }}">Lock Screen</a>
-          </li>
-        </ul>
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <!-- Sidebar user panel (optional) -->
+    <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+      <div class="image">
+        @auth
+          <img src="{{ url('assets/uploads/admin/profile/' . Auth::user('admin_user')->image) }}" alt="profile image">
+        @endauth
       </div>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link" href="https://www.bootstrapdash.com/demo/star-laravel-free/documentation/documentation.html" target="_blank">
-        <i class="menu-icon mdi mdi-file-outline"></i>
-        <span class="menu-title">Documentation</span>
-      </a>
-    </li>
-  </ul>
-</nav>
+      <div class="info">
+          @auth
+            <a href="#" class="d-block">{{ Auth::user('admin_user')->username }}</a>
+          @endauth
+      </div>
+    </div>
+
+    <!-- Sidebar Menu -->
+    <nav class="mt-2">
+      <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+        <li class="nav-item menu-open">
+          <a href="{{ route('dashboard') }}" class="nav-link {{ active_class(['*dashboard*']) }}">
+            <i class="nav-icon fas fa-tachometer-alt"></i>
+            <p> Dashboard </p>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="{{ route('country') }}" class="nav-link {{ request()->is('*country*') ? 'active' : '' }}">
+            <i class="fas fa-map-marker-alt nav-icon"></i>
+            <p>Country</p>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="{{ route('category') }}" class="nav-link {{ request()->is('category') ? 'active' : '' }}">
+            <i class="fas fa-list-alt nav-icon"></i>
+            <p>Category</p>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="{{ route('dashboard') }}" class="nav-link">
+            <i class="fas fa-ticket-alt nav-icon"></i>
+            <p>Coupon</p>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="{{ route('dashboard') }}" class="nav-link">
+            <i class="fas fa-credit-card nav-icon"></i>
+            <p>Payment Gateway</p>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="{{ route('dashboard') }}" class="nav-link">
+            <i class="fas fa-question-circle nav-icon"></i>
+            <p>Enquiries</p>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="{{ route('dashboard') }}" class="nav-link">
+            <i class="fas fa-money-check-alt nav-icon"></i>
+            <p>Payout List</p>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="{{ route('dashboard') }}" class="nav-link">
+            <i class="fas fa-building nav-icon"></i>
+            <p>Properties</p>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="{{ route('dashboard') }}" class="nav-link">
+            <i class="fas fa-images nav-icon"></i>
+            <p>Property Gallery</p>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="{{ route('dashboard') }}" class="nav-link">
+            <i class="fas fa-calendar-check nav-icon"></i>
+            <p>Booking</p>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="{{ route('dashboard') }}" class="nav-link">
+            <i class="fas fa-users nav-icon"></i>
+            <p>User List</p>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="{{ route('logout') }}" class="nav-link">
+            <i class="fas fa-sign-out-alt nav-icon"></i>
+            <p>Log out</p>
+          </a>
+        </li>
+        <!-- <li class="nav-item">
+          <a href="#" class="nav-link">
+            <i class="nav-icon fas fa-th"></i>
+            <p> Simple Link <span class="right badge badge-danger">New</span> </p>
+          </a>
+        </li> -->
+      </ul>
+    </nav>
+    <!-- /.sidebar-menu -->
+
+  </div>
+  <!-- /.sidebar -->
+</aside>

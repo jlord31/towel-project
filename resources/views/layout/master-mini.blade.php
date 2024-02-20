@@ -1,83 +1,66 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-  <title>Towel Admin Dashboard</title>
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  
-  <!-- CSRF Token -->
-  <meta name="_token" content="{{ csrf_token() }}">
-  
-  <link rel="shortcut icon" href="{{ asset('/favicon.ico') }}">
+    <title>Towel Admin Panel</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <!-- plugin css -->
-  {!! Html::style('assets/plugins/@mdi/font/css/materialdesignicons.min.css') !!}
-  {!! Html::style('assets/plugins/perfect-scrollbar/perfect-scrollbar.css') !!}
-  {!! Html::style('assets/plugins/toastr/toastr.min.css') !!}
-  <!-- end plugin css -->
+    <!-- CSRF Token -->
+    <meta name="_token" content="{{ csrf_token() }}">
 
-  <!-- plugin css -->
-  @stack('plugin-styles')
-  <!-- end plugin css -->
+    <link rel="shortcut icon" href="{{ asset('images/logo.jpg') }}">
 
-  @push('plugin-styles')
-    <style>
-        
-        /* Override toastr styles */
-        .toast-success {
-            background-color: #28a745; /* Set the background color for success messages */
-            color: #fff; /* Set the text color for success messages */
-        }
-        .toast-warning {
-        color: #fff;
-        background-color: #f0ad4e;
-        }
-        .toast-error {
-            background-color: #dc3545; /* Set the background color for error messages */
-            color: #fff; /* Set the text color for error messages */
-        }
+    <!-- Google Font: Source Sans Pro -->
+   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
 
-    </style>
-  @endpush
+    <!-- plugin css -->
 
-  <!-- show toast message -->
-  @if(Session::has('success'))
-    <script>
-      toastr.success("{{ Session::get('success') }}");
-    </script>
-  @endif
+    <!-- Font Awesome -->
+    {!! Html::style('assets/plugins/fontawesome-free/css/all.min.css') !!}
+    <!-- icheck bootstrap -->
+    {!! Html::style('assets/plugins/icheck-bootstrap/icheck-bootstrap.min.css') !!}
+    <!-- App style -->
+    {!! Html::style('assets/dist/css/adminlte.min.css') !!}
+    <!-- Toastr style -->
+    {!! Html::style('assets/plugins/toastr/toastr.min.css') !!}
+    <!-- end plugin css -->
 
-  @if(Session::has('error'))
-    <script>
-      toastr.error("{{ Session::get('error') }}");
-    </script>
-  @endif
-
-  <!-- common css -->
-    {!! Html::style('css/app.css') !!}
-  <!-- end common css -->
-
-  @stack('style')
 </head>
-<body data-base-url="{{url('/')}}">
 
-  <div class="container-scroller" id="app">
-    <div class="container-fluid page-body-wrapper full-page-wrapper">
-      @yield('content')
-    </div>
-  </div>
+<body class="hold-transition login-page" style="background-image: url({{ url('assets/images/admin_login_page.jpeg') }}); background-size: cover;">
 
-    <!-- base js -->
-    {!! Html::script('js/app.js') !!}
-    {!! Html::script('assets/plugins/toastr/toastr.min.js') !!}
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
-    <!-- end base js -->
+    @yield('content')
+
 
     <!-- plugin js -->
-    @stack('plugin-scripts')
+
+    <!-- jQuery -->
+    {!! Html::script('assets/plugins/jquery/jquery.min.js') !!}
+    <!-- Bootstrap 4 -->
+    {!! Html::script('assets/plugins/bootstrap/js/bootstrap.bundle.min.js') !!}
+    <!-- toastr -->
+    {!! Html::script('assets/plugins/toastr/toastr.min.js') !!}
+    <!-- AdminLTE App -->
+    {!! Html::script('assets/dist/js/adminlte.min.js') !!}
+    
+
     <!-- end plugin js -->
 
-    @stack('custom-scripts')
+    <!-- show toast message -->
+    @if(session()->has('success'))
+        <script>
+            toastr.success("{{ Session::get('success') }}");
+        </script>
+      @endif
+
+      @if(session()->has('error'))
+        <script>
+            toastr.error("{{ Session::get('error') }}");
+        </script>
+      @endif
+
 </body>
+
 </html>
