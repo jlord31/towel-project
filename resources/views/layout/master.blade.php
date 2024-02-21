@@ -49,10 +49,22 @@
   @stack('plugin-scripts')
   <!-- end plugin js -->
 
+  
+  {!! Html::script('assets/dist/js/adminlte.min.js') !!}
+  {!! Html::script('assets/plugins/toastr/toastr.min.js') !!}
+
+  @stack('custom-scripts')
+
   <!-- show toast message -->
   @if(Session::has('success'))
     <script>
       toastr.success("{{ Session::get('success') }}");
+    </script>
+  @endif
+
+  @if(Session::has('warning'))
+    <script>
+      toastr.warning("{{ Session::get('warning') }}");
     </script>
   @endif
 
@@ -62,10 +74,5 @@
     </script>
   @endif
 
-  
-  {!! Html::script('assets/dist/js/adminlte.min.js') !!}
-  {!! Html::script('assets/plugins/toastr/toastr.min.js') !!}
-
-  @stack('custom-scripts')
 </body>
 </html>

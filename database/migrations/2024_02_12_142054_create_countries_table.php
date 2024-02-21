@@ -13,6 +13,10 @@ return new class extends Migration
     {
         Schema::create('countries', function (Blueprint $table) {
             $table->id();
+            $table->string('name');
+            $table->string('code');
+            $table->text('img');
+            $table->enum('status', ['active', 'inactive', 'deleted']);
             $table->timestamps();
         });
     }
