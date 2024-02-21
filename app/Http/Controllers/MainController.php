@@ -3,16 +3,22 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 
 use App\Models\Admin;
+use App\Models\Country;
 
 use Brian2694\Toastr\Facades\Toastr;
 
 class MainController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth:admin')->except(['login']);
+    }
     //
     public function login(Request $req)
     {
@@ -91,17 +97,61 @@ class MainController extends Controller
 
     function countryView() 
     {
-        return view("country");
+        $country = Country::all();
+
+        return view("country", compact('country'));
     }
 
     function saveNewCountry(Request $req) 
     {
-        
+        $req->validate([
+            'name'=>'required',
+            'code'=>'required',
+            'img' => 'required',
+            'status' => 'required'
+        ]);
+
+        //dd($req->file('img'));
+
+        if (Country::where('name', $req->input('name'))->exists()) 
+        {
+            Session::flash('warning', 'country already exsists');
+            return back();
+        }
+        else 
+        {
+
+            if($req->file('img')) 
+            {
+                $fileName = time().'_'.$req->img->getClientOriginalName();
+                $filePath = $req->file('img')->move(public_path('assets/uploads/country/flags/'),$fileName);
+
+                $data = $req->all();
+                $data['img'] = $fileName; // Modify filename
+
+                $add_new_country = Country::create($data);
+
+                if ($add_new_country) 
+                {
+                    Session::flash('success', 'successfully added a new country');
+                    return back();
+                } 
+                else 
+                {
+                    Session::flash('error', 'Error occurred when tring to add a new country');
+                    return back();
+                }
+            }
+
+        }
     }
 
     function categoryView() 
     {
-        return view("category");
+       
+        $country = Country::all();
+
+        return view("category", compact('country'));
     }
 
     function saveNewCategory(Request $req) 
