@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\File;
 
 use App\Models\Admin;
 use App\Models\Country;
@@ -97,7 +98,7 @@ class MainController extends Controller
 
     function countryView() 
     {
-        $country = Country::all();
+        $country = Country::where([['status', '!=', 'deleted']])->get();
 
         return view("country", compact('country'));
     }
@@ -110,8 +111,6 @@ class MainController extends Controller
             'img' => 'required',
             'status' => 'required'
         ]);
-
-        //dd($req->file('img'));
 
         if (Country::where('name', $req->input('name'))->exists()) 
         {
@@ -144,6 +143,60 @@ class MainController extends Controller
             }
 
         }
+    }
+
+    function loadCountryDetails($id) 
+    {
+        $item = Country::findOrFail($id);
+
+        return response()->json(['status' => 'success', 'data' => $item]); 
+    }
+
+    function updateCountry(Request $req) 
+    {
+        // Retrieve the country model based on the submitted ID
+        $country = Country::findOrFail($req->input('id'));
+
+        if($req->file('img_edit')) 
+        {
+            // Get the old image path
+            $oldImagePath = public_path('assets/uploads/country/flags/' . $country->img);
+
+            // Delete the old image if it exists
+            if (File::exists($oldImagePath)) {
+                File::delete($oldImagePath);
+            }
+
+            $fileName = time().'_'.$req->img_edit->getClientOriginalName();
+            $filePath = $req->file('img_edit')->move(public_path('assets/uploads/country/flags/'),$fileName);
+
+            $country->img = $fileName;
+        }
+
+        // Update specific attributes with the validated data
+        $country->name = $req->input('name_edit');
+        $country->code = $req->input('code_edit');
+        $country->status = $req->input('status_edit');
+        
+        // Save the updated university model
+        $save = $country->save();
+
+        if ($save) 
+        {
+            return response()->json(['status' => 'success', 'data' => 'Successfully updated country data']);
+        } 
+        else 
+        {
+            return response()->json(['status' => 'error', 'data' => 'Error occurred when trying to update country data. Please try again later']);
+        }
+    }
+
+    function deleteCountry($id) 
+    {
+        $item = Country::findOrFail($id);
+        $item->update(['status' => 'deleted']);
+
+        return response()->json(['message' => 'Successfully deleted country']);
     }
 
     function categoryView() 

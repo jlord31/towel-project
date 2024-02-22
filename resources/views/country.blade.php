@@ -48,7 +48,7 @@
                             @csrf
                         <div class="form-group">
                             <label for="inputName">Country Name</label>
-                            <input type="text" id="name" name="name" class="form-control" required placeholder="Enter country name here">
+                            <input type="text" id="name" name="name" class="form-control" required placeholder="Enter country name here"/>
                         </div>
                         <div class="form-group">
                             <label for="inputName">Country Code</label>
@@ -58,7 +58,7 @@
                             <label for="exampleInputFile">Country colour Flag</label>
                             <div class="input-group">
                             <div class="custom-file">
-                                <input type="file" class="custom-file-input" required name="img" id="img">
+                                <input type="file" class="custom-file-input" required name="img" id="img"/>
                                 <label class="custom-file-label" for="exampleInputFile">Choose file</label>
                             </div>
                             <div class="input-group-append">
@@ -83,7 +83,7 @@
         <div class="row mb-5">
             <div class="col-12">
                 <input type="reset" value="Cancel" class="btn btn-secondary" />
-                <input type="submit" value="Add" class="btn btn-success float-right">
+                <input type="submit" value="Add" class="btn btn-success float-right"/>
             </div>
         </div>
         </form>
@@ -103,7 +103,7 @@
                         </div>
                         <!-- /.card-header -->
                         <div class="card-body">
-                            <table id="example1" class="table table-bordered table-striped">
+                            <table id="country-table" class="table table-bordered table-striped">
                                 <thead>
                                     <tr>
                                         <th>S/N</th>
@@ -124,7 +124,7 @@
                                         <td> {{$data->status}} </td>
                                         <td>
                                             <div class="d-flex flex-wrap">
-                                                <button type="submit" class="btn btn-small btn-secondary mr-1" data-toggle="modal" data-target="#editModal" data-id="{{ $data->id }}"><i class="fas fa-edit"></i></button>
+                                                <button type="submit" class="btn btn-small btn-secondary mr-1" data-toggle="modal" data-target="#edit-modal" data-id="{{ $data->id }}"><i class="fas fa-edit"></i></button>
                                                 
                                                 <button type="submit" class="btn btn-danger deleteBtn" data-toggle="modal" data-target="#DeleteModal" data-id="{{ $data->id }}"><i class="fas fa-trash"></i></button>
                                         
@@ -159,6 +159,64 @@
 </div>
 <!-- /.content-wrapper -->
 
+<!-- start edit modal -->
+<div class="modal fade" id="edit-modal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+              <h4 class="modal-title">Edit Country Details</h4>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <form class="forms-sample" id="editForm">
+                <div class="modal-body">
+                    <input type="hidden" name="id" id="id" />
+
+                    <div class="form-group">
+                        <label for="inputName">Country Name</label>
+                        <input type="text" id="name_edit" name="name_edit" class="form-control" required placeholder="Enter country name here"/>
+                    </div>
+                    <div class="form-group">
+                        <label for="inputName">Country Code</label>
+                        <input type="text" id="code_edit" name="code_edit" class="form-control" required placeholder="Enter country code here"/>
+                    </div>
+                    <div class="form-group">
+                        <label for="countryFlag">Country colour Flag</label>
+                        <br />
+                        <small style="color:red;"> leave blank if you do not wish to change country flag </small>
+                        <div class="input-group">
+                            <div class="custom-file">
+                                <input type="file" class="custom-file-input" placeholder="leave blank if you do not wish to change country flag" name="img_edit" id="img_edit"/>
+                                <label class="custom-file-label" for="countryFlag">Choose file</label>
+                            </div>
+                            <div class="input-group-append">
+                                <span class="input-group-text">Upload</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="inputStatus">Status</label>
+                        <select id="status_edit" name="status_edit" class="form-control custom-select">
+                            <option selected disabled>Select one</option>
+                            <option>active</option>
+                            <option>inactive</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="modal-footer justify-content-between">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Save changes</button>
+                    
+                </div>
+            </form>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<!-- /.end edit modal -->
 
 <!-- start delete modal -->
 <div class="modal fade" id="DeleteModal">
@@ -171,10 +229,9 @@
               </button>
             </div>
             <div class="modal-body">
-                <input type="text" id="id" name="id" /> 
                 <p>Type <strong>delete</strong> to confirm:</p>
                 <div class="form-group">
-                    <input class="form-control" maxlength="6" type="text" id="deleteConfirmationInput">
+                    <input class="form-control" maxlength="6" required type="text" id="deleteConfirmationInput"/>
                 </div>
                 <div class="mt-2">
                     <p>This action is irreversible. Are you sure you want to permanently delete this department?</p>
@@ -211,23 +268,24 @@
     <!-- DataTables  & Plugins -->
     <script>
         $(document).ready(function () {
+            var deleteFormId;
+
             $(function () {
-                $("#example1").DataTable({
+                $("#country-table").DataTable({
                     "responsive": true,
                     "lengthChange": false,
                     "autoWidth": false,
                     "buttons": ["excel", "pdf", "print", "colvis"]
-                }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+                }).buttons().container().appendTo('#country-table_wrapper .col-md-6:eq(0)');
+            });
 
-                $('#example2').DataTable({
-                    "paging": true,
-                    "lengthChange": false,
-                    "searching": false,
-                    "ordering": true,
-                    "info": true,
-                    "autoWidth": false,
-                    "responsive": true,
-                });
+            // assign an ID to be deleted
+            $('#country-table').on('click', '.deleteBtn', function () {
+                event.preventDefault(); // Prevent the default form submission
+
+                deleteFormId = $(this).data('id'); // Store the form ID in the deleteFormId variable
+                
+                // $('#confirmDeleteBtn').data('id', formId); // Store the form ID in the confirm delete button
             });
 
             // handle delete
@@ -238,64 +296,111 @@
                 // check if the user correctly typed delete
                 var deleteConfirmationInput = $('#deleteConfirmationInput').val().trim().toLowerCase();
 
-                console.log(deleteConfirmationInput);
 
-                var deleteId = $(this).data('id');
+                if (deleteConfirmationInput === 'delete') 
+                {
 
-                console.log(deleteId);
+                    // Send an AJAX request to delete the item
+                    $.ajax({
+                        url: '{{ route("delete-country", ["id" => ":id"]) }}'.replace(':id', deleteFormId),
+                        type: 'DELETE',
+                        data: {
+                            _token: '{{ csrf_token() }}'
+                        },
+                        success: function(response) {
+                            // Handle the success response
 
-                // if (deleteConfirmationInput === 'delete') 
-                // {
-                //     var deleteId = $(this).data('id');
+                            toastr.success(response.message);
 
-                //     // Send an AJAX request to delete the item
-                //     $.ajax({
-                //         url: '{{ route("login", ["id" => ":id"]) }}'.replace(':id', deleteId),
-                //         type: 'DELETE',
-                //         data: {
-                //             _token: '{{ csrf_token() }}'
-                //         },
-                //         success: function(response) {
-                //             // Handle the success response
-
-                //             if (response.success) 
-                //             {
-                //                 toastr.success(response.success);
-                //             } 
-                //             else 
-                //             {
-                //                 toastr.error(response.error);
-                //             }
-
-                //             // Close the delete modal
-                //             $('.uk-modal-close').trigger('click');
-
-                //             // Reload the page after a delay of 2 seconds (2000 milliseconds)
-                //             setTimeout(function() {
-                //             location.reload();
-                //             }, 2000);
-                //         },
-                //         error: function(xhr, status, error) {
-                //             // Handle the error response, e.g., show an error message
-                //             toastr.error(error);
-                            
-                //             // Close the delete modal
-                //             $('.uk-modal-close').trigger('click');
-
-                //         }
-                //     });
-                // } 
-                // else 
-                // {
-                //     toastr.error('Invalid delete confirmation');
-
-                //     // Close the delete modal
-                //     $('.uk-modal-close').trigger('click');
-
-                // }
+                            // Reload the page after a delay of 2 seconds (2000 milliseconds)
+                            setTimeout(function() {
+                            location.reload();
+                            }, 2000);
+                        },
+                        error: function(xhr, status, error) {
+                            // Handle the error response, show an error message
+                            toastr.error(error);
+                        }
+                    });
+                } 
+                else 
+                {
+                    toastr.error('Invalid delete confirmation');
+                }
 
             });
-        });
 
+            // Event handler for edit button click
+            $('#country-table').on('click', '.mr-1', function () 
+            {
+                var itemId = $(this).data('id');
+
+                // Make AJAX request to fetch item details
+                $.ajax({
+                    url: '{{ route("load-country-details", ["id" => ":id"]) }}'.replace(':id', itemId),
+                    type: 'GET',
+                    dataType: 'json',
+                    success: function(response) {
+
+                        // Populate the form fields with fetched data
+                        $('#id').val(response.data.id);
+                        $('#name_edit').val(response.data.name);
+                        $('#code_edit').val(response.data.code);
+                        $('#status_edit').val(response.data.status).trigger('change');
+
+                    },
+                    error: function(xhr, status, error) {
+                        toastr.error(error);
+                        console.log(xhr);
+                        // // Close the delete modal
+                        $('#editModal').modal('hide');
+                    }
+                });
+            });
+
+            //Event handler to save form edit
+            $('#editForm').submit(function(e) 
+            {
+                e.preventDefault();
+
+                var formData = new FormData(this); // Pass the form element here
+
+                //console.log([..formData]);
+                
+                // Perform AJAX request to update university data
+                $.ajax({
+                    url: '{{route("update-country")}}',
+                    type: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+                    },
+                    data: formData,
+                    contentType: false,
+                    cache: false,
+                    processData:false,
+                    success: function(response) {
+                        // Handle success response
+                        if (response.status == 'success') 
+                        {
+                            toastr.success(response.data);
+                        } 
+                        else 
+                        {
+                            toastr.error(response.data);
+                        }
+
+                        // Reload the page after a delay of 2 seconds (2000 milliseconds)
+                        setTimeout(function() {
+                        location.reload();
+                        }, 2000);
+
+                    },
+                    error: function(xhr, status, error) {
+                        toastr.error(error);
+                        console.log(xhr);
+                    }
+                });
+            });
+        });    
     </script>
 @endpush
