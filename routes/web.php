@@ -39,6 +39,10 @@ Route::group(['middleware' => 'auth:admin', 'prefix' => 'admin'], function(){
 
     Route::get('/country',[MainController::class,'countryView'])->name('country');
     Route::post('/country',[MainController::class,'saveNewCountry'])->name('country');
+    Route::delete('/delete-country/{id}', [MainController::class,'deleteCountry'])->name('delete-country');
+    Route::get('/country/load-country-details/{id}',[MainController::class,'loadCountryDetails'])->name('load-country-details');
+    Route::post('/country/update-country',[MainController::class,'updateCountry'])->name('update-country');
+    
 
     Route::get('/category',[MainController::class,'categoryView'])->name('category');
     Route::post('/category',[MainController::class,'saveNewCategory'])->name('category');
