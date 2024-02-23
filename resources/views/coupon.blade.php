@@ -5,6 +5,7 @@
     {!! Html::style('/assets/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css') !!}
     {!! Html::style('/assets/plugins/datatables-responsive/css/responsive.bootstrap4.min.css') !!}
     {!! Html::style('/assets/plugins/datatables-buttons/css/buttons.bootstrap4.min.css') !!}
+    
 @endpush
 
 
@@ -16,13 +17,13 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1>Category Management</h1>
+                    <h1>Coupon Management</h1>
                 </div>
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Dashboard</a>
                         </li>
-                        <li class="breadcrumb-item active">Categories</li>
+                        <li class="breadcrumb-item active">Coupon</li>
                     </ol>
                 </div>
             </div>
@@ -35,7 +36,7 @@
             <div class="col-md-12">
                 <div class="card card-primary">
                     <div class="card-header">
-                        <h3 class="card-title">Add Category</h3>
+                        <h3 class="card-title">Add Coupon</h3>
 
                         <div class="card-tools">
                             <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
@@ -44,14 +45,34 @@
                         </div>
                     </div>
                     <div class="card-body">
-                        <form action="{{route('category')}}" enctype="multipart/form-data" method="POST">
+                        <form action="{{route('coupon')}}" enctype="multipart/form-data" method="POST">
                             @csrf
                         <div class="form-group">
-                            <label for="inputName">Category Title</label>
-                            <input type="text" id="title" name="title" class="form-control" required placeholder="Enter category title here"/>
+                            <label for="inputName">Coupon Title</label>
+                            <input type="text" id="title" name="title" class="form-control" required placeholder="Enter coupon title here e.g 10% discount on property rental"/>
+                        </div>
+                        <!-- coupon start Date and time -->
+                        <div class="form-group">
+                        <label>Coupon Start Date and time</label>
+                            <div class="input-group date" id="couponstartdatetime" data-target-input="nearest">
+                                <input type="text" class="form-control datetimepicker-input" data-target="#reservationdatetime"/>
+                                <div class="input-group-append" data-target="#reservationdatetime" data-toggle="datetimepicker">
+                                    <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- coupon end Date and time -->
+                        <div class="form-group">
+                        <label>Coupon End Date and time</label>
+                            <div class="input-group date" id="couponenddatetime" data-target-input="nearest">
+                                <input type="text" class="form-control datetimepicker-input" data-target="#reservationdatetime"/>
+                                <div class="input-group-append" data-target="#reservationdatetime" data-toggle="datetimepicker">
+                                    <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                                </div>
+                            </div>
                         </div>
                         <div class="form-group">
-                            <label for="exampleInputFile">Category image</label>
+                            <label for="exampleInputFile">Coupon image</label>
                             <div class="input-group">
                             <div class="custom-file">
                                 <input type="file" class="custom-file-input" required name="img" id="img"/>
@@ -109,7 +130,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($category as $data)
+                                    @foreach ($coupon as $data)
                                     <tr>
                                         <td>{{ $loop->iteration }}</td>
                                         <td> {{$data->title}} </td>
@@ -257,6 +278,8 @@
     {!! Html::script('/assets/plugins/datatables-buttons/js/buttons.html5.min.js') !!}
     {!! Html::script('/assets/plugins/datatables-buttons/js/buttons.print.min.js') !!}
     {!! Html::script('/assets/plugins/datatables-buttons/js/buttons.colVis.min.js') !!}
+    {!! Html::script('/assets/plugins/jquery-ui/jquery-ui.min.js') !!}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.5.0/js/bootstrap-datepicker.js"></script>
 @endpush
 
 @push('custom-scripts')
@@ -264,6 +287,15 @@
     <script>
         $(document).ready(function () 
         {
+            
+
+            $(function () 
+            {
+                //Date and time picker
+                $('#couponenddatetime').datetimepicker({ icons: { time: 'far fa-clock' } });
+                $('#couponstartdatetime').datetimepicker({ icons: { time: 'far fa-clock' } });
+            });
+            
             $(function () {
                 $("#category-table").DataTable({
                     "responsive": true,

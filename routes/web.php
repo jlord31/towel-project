@@ -34,18 +34,28 @@ Route::get('/admin/logout', function () {
 
 Route::group(['middleware' => 'auth:admin', 'prefix' => 'admin'], function(){
 
-    // Route::view('/dashboard','admin.dashboard')->name('admin.dashboard');
     Route::get('/dashboard',[MainController::class,'dashboard'])->name('dashboard');
 
+    // country routes
     Route::get('/country',[MainController::class,'countryView'])->name('country');
     Route::post('/country',[MainController::class,'saveNewCountry'])->name('country');
     Route::delete('/delete-country/{id}', [MainController::class,'deleteCountry'])->name('delete-country');
     Route::get('/country/load-country-details/{id}',[MainController::class,'loadCountryDetails'])->name('load-country-details');
     Route::post('/country/update-country',[MainController::class,'updateCountry'])->name('update-country');
     
-
+    // category routes
     Route::get('/category',[MainController::class,'categoryView'])->name('category');
     Route::post('/category',[MainController::class,'saveNewCategory'])->name('category');
+    Route::delete('/delete-category/{id}', [MainController::class,'deleteCategory'])->name('delete-category');
+    Route::get('/category/load-category-details/{id}',[MainController::class,'loadCategoryDetails'])->name('load-category-details');
+    Route::post('/category/update-category',[MainController::class,'updateCategory'])->name('update-category');
+
+    // coupon routes
+    Route::get('/coupon',[MainController::class,'couponView'])->name('coupon');
+    Route::post('/coupon',[MainController::class,'saveNewCoupon'])->name('coupon');
+    Route::delete('/delete-coupon/{id}', [MainController::class,'deleteCoupon'])->name('delete-coupon');
+    Route::get('/coupon/load-coupon-details/{id}',[MainController::class,'loadCouponDetails'])->name('load-coupon-details');
+    Route::post('/coupon/update-coupon',[MainController::class,'updateCoupon'])->name('update-coupon');
 
     Route::view('/change-password','change-password');
     Route::get('/change-password',[MainController::class,'changePasswordView'])->name('change-password');

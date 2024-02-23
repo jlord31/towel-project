@@ -11,6 +11,8 @@ use Illuminate\Support\Facades\File;
 
 use App\Models\Admin;
 use App\Models\Country;
+use App\Models\Category;
+use App\Models\Coupon;
 
 use Brian2694\Toastr\Facades\Toastr;
 
@@ -202,13 +204,111 @@ class MainController extends Controller
     function categoryView() 
     {
        
-        $country = Country::all();
+        $category = Category::where([['status', '!=', 'deleted']])->get();
 
-        return view("category", compact('country'));
+        return view("category", compact('category'));
     }
 
     function saveNewCategory(Request $req) 
     {
-        
+        $req->validate([
+            'title'=>'required',
+            'img' => 'required',
+            'status' => 'required'
+        ]);
+
+        if (Category::where('title', $req->input('title'))->exists()) 
+        {
+            Session::flash('warning', 'category already exsists');
+            return back();
+        }
+        else 
+        {
+
+            if($req->file('img')) 
+            {
+                $fileName = time().'_'.$req->img->getClientOriginalName();
+                $filePath = $req->file('img')->move(public_path('assets/uploads/category/'),$fileName);
+
+                $data = $req->all();
+                $data['img'] = $fileName; // Modify filename
+
+                $add_new_category = Category::create($data);
+
+                if ($add_new_category) 
+                {
+                    Session::flash('success', 'successfully added a new category');
+                    return back();
+                } 
+                else 
+                {
+                    Session::flash('error', 'Error occurred when tring to add a new category');
+                    return back();
+                }
+            }
+
+        }
     }
+
+    function loadCategoryDetails($id) 
+    {
+        $item = Category::findOrFail($id);
+
+        return response()->json(['status' => 'success', 'data' => $item]); 
+    }
+
+    function updateCategory(Request $req) 
+    {
+        // Retrieve the category model based on the submitted ID
+        $category = Category::findOrFail($req->input('id'));
+
+        if($req->file('img_edit')) 
+        {
+            // Get the old image path
+            $oldImagePath = public_path('assets/uploads/category/' . $category->img);
+
+            // Delete the old image if it exists
+            if (File::exists($oldImagePath)) {
+                File::delete($oldImagePath);
+            }
+
+            $fileName = time().'_'.$req->img_edit->getClientOriginalName();
+            $filePath = $req->file('img_edit')->move(public_path('assets/uploads/category/'),$fileName);
+
+            $category->img = $fileName;
+        }
+
+        // Update specific attributes with the validated data
+        $category->title = $req->input('title_edit');
+        $category->status = $req->input('status_edit');
+        
+        // Save the updated category model
+        $save = $category->save();
+
+        if ($save) 
+        {
+            return response()->json(['status' => 'success', 'data' => 'Successfully updated category data']);
+        } 
+        else 
+        {
+            return response()->json(['status' => 'error', 'data' => 'Error occurred when trying to update category data. Please try again later']);
+        }
+    }
+
+    function deleteCategory($id) 
+    {
+        $item = Category::findOrFail($id);
+        $item->update(['status' => 'deleted']);
+
+        return response()->json(['message' => 'Successfully deleted category']);
+    }
+
+    function couponView() 
+    {
+       
+        $coupon = Coupon::where([['status', '!=', 'deleted']])->get();
+
+        return view("coupon", compact('coupon'));
+    }
+
 }

@@ -16,7 +16,7 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1>Country</h1>
+                    <h1>Country Management</h1>
                 </div>
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
@@ -121,7 +121,13 @@
                                         <td> {{$data->name}} </td>
                                         <td> {{$data->code}} </td>
                                         <td><img src="{{ asset('assets/uploads/country/flags/'.$data->img) }}"  alt="country flag" width="50" height="25"/></td>
-                                        <td> {{$data->status}} </td>
+                                        <td> 
+                                            @if($data->status == 'active')
+                                            <span class="badge badge-success">{{$data->status}}</span>
+                                            @else
+                                            <span class="badge badge-warning">{{$data->status}}</span>
+                                            @endif
+                                        </td>
                                         <td>
                                             <div class="d-flex flex-wrap">
                                                 <button type="submit" class="btn btn-small btn-secondary mr-1" data-toggle="modal" data-target="#edit-modal" data-id="{{ $data->id }}"><i class="fas fa-edit"></i></button>

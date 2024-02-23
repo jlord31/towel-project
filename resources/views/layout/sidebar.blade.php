@@ -27,19 +27,19 @@
           </a>
         </li>
         <li class="nav-item">
-          <a href="{{ route('country') }}" class="nav-link {{ request()->is('*country*') ? 'active' : '' }}">
+          <a href="{{ route('country') }}" class="nav-link {{ active_class(['*country*']) }}">
             <i class="fas fa-map-marker-alt nav-icon"></i>
             <p>Country</p>
           </a>
         </li>
         <li class="nav-item">
-          <a href="{{ route('category') }}" class="nav-link {{ request()->is('category') ? 'active' : '' }}">
+          <a href="{{ route('category') }}" class="nav-link {{ active_class(['*category*']) }}">
             <i class="fas fa-list-alt nav-icon"></i>
             <p>Category</p>
           </a>
         </li>
         <li class="nav-item">
-          <a href="{{ route('dashboard') }}" class="nav-link">
+          <a href="{{ route('coupon') }}" class="nav-link {{ active_class(['*coupon*']) }}">
             <i class="fas fa-ticket-alt nav-icon"></i>
             <p>Coupon</p>
           </a>
