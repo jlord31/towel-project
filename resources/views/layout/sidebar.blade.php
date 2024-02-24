@@ -27,61 +27,61 @@
           </a>
         </li>
         <li class="nav-item">
-          <a href="{{ route('country') }}" class="nav-link {{ request()->is('*country*') ? 'active' : '' }}">
+          <a href="{{ route('country') }}" class="nav-link {{ active_class(['*country*']) }}">
             <i class="fas fa-map-marker-alt nav-icon"></i>
             <p>Country</p>
           </a>
         </li>
         <li class="nav-item">
-          <a href="{{ route('category') }}" class="nav-link {{ request()->is('category') ? 'active' : '' }}">
+          <a href="{{ route('category') }}" class="nav-link {{ active_class(['*category*']) }}">
             <i class="fas fa-list-alt nav-icon"></i>
             <p>Category</p>
           </a>
         </li>
         <li class="nav-item">
-          <a href="{{ route('dashboard') }}" class="nav-link">
+          <a href="{{ route('coupon') }}" class="nav-link {{ active_class(['*coupon*']) }}">
             <i class="fas fa-ticket-alt nav-icon"></i>
             <p>Coupon</p>
           </a>
         </li>
         <li class="nav-item">
-          <a href="{{ route('dashboard') }}" class="nav-link">
+          <a href="{{ route('payment') }}" class="nav-link {{ active_class(['*payment*']) }}">
             <i class="fas fa-credit-card nav-icon"></i>
             <p>Payment Gateway</p>
           </a>
         </li>
         <li class="nav-item">
-          <a href="{{ route('dashboard') }}" class="nav-link">
+          <a href="{{ route('dashboard') }}" class="nav-link {{ active_class(['*dashboard*']) }}">
             <i class="fas fa-question-circle nav-icon"></i>
             <p>Enquiries</p>
           </a>
         </li>
         <li class="nav-item">
-          <a href="{{ route('dashboard') }}" class="nav-link">
+          <a href="{{ route('dashboard') }}" class="nav-link {{ active_class(['*dashboard*']) }}">
             <i class="fas fa-money-check-alt nav-icon"></i>
             <p>Payout List</p>
           </a>
         </li>
         <li class="nav-item">
-          <a href="{{ route('dashboard') }}" class="nav-link">
+          <a href="{{ route('dashboard') }}" class="nav-link {{ active_class(['*dashboard*']) }}">
             <i class="fas fa-building nav-icon"></i>
             <p>Properties</p>
           </a>
         </li>
         <li class="nav-item">
-          <a href="{{ route('dashboard') }}" class="nav-link">
+          <a href="{{ route('dashboard') }}" class="nav-link {{ active_class(['*dashboard*']) }}">
             <i class="fas fa-images nav-icon"></i>
             <p>Property Gallery</p>
           </a>
         </li>
         <li class="nav-item">
-          <a href="{{ route('dashboard') }}" class="nav-link">
+          <a href="{{ route('dashboard') }}" class="nav-link {{ active_class(['*dashboard*']) }}">
             <i class="fas fa-calendar-check nav-icon"></i>
             <p>Booking</p>
           </a>
         </li>
         <li class="nav-item">
-          <a href="{{ route('dashboard') }}" class="nav-link">
+          <a href="{{ route('dashboard') }}" class="nav-link {{ active_class(['*dashboard*']) }}">
             <i class="fas fa-users nav-icon"></i>
             <p>User List</p>
           </a>

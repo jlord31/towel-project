@@ -1,10 +1,7 @@
 @extends('layout.master')
 
 @push('plugin-styles')
-    <!-- DataTables -->
-    {!! Html::style('/assets/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css') !!}
-    {!! Html::style('/assets/plugins/datatables-responsive/css/responsive.bootstrap4.min.css') !!}
-    {!! Html::style('/assets/plugins/datatables-buttons/css/buttons.bootstrap4.min.css') !!}
+    <!-- extra styles -->
 @endpush
 
 
@@ -16,7 +13,7 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1>Country</h1>
+                    <h1>Country Management</h1>
                 </div>
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
@@ -121,7 +118,13 @@
                                         <td> {{$data->name}} </td>
                                         <td> {{$data->code}} </td>
                                         <td><img src="{{ asset('assets/uploads/country/flags/'.$data->img) }}"  alt="country flag" width="50" height="25"/></td>
-                                        <td> {{$data->status}} </td>
+                                        <td> 
+                                            @if($data->status == 'active')
+                                            <span class="badge badge-success">{{$data->status}}</span>
+                                            @else
+                                            <span class="badge badge-warning">{{$data->status}}</span>
+                                            @endif
+                                        </td>
                                         <td>
                                             <div class="d-flex flex-wrap">
                                                 <button type="submit" class="btn btn-small btn-secondary mr-1" data-toggle="modal" data-target="#edit-modal" data-id="{{ $data->id }}"><i class="fas fa-edit"></i></button>
@@ -234,7 +237,7 @@
                     <input class="form-control" maxlength="6" required type="text" id="deleteConfirmationInput"/>
                 </div>
                 <div class="mt-2">
-                    <p>This action is irreversible. Are you sure you want to permanently delete this department?</p>
+                    <p>This action is irreversible. Are you sure you want to permanently delete this country?</p>
                 </div>
             </div>
             <div class="modal-footer justify-content-between">
@@ -250,18 +253,7 @@
 @endsection
 
 @push('plugin-scripts')
-    {!! Html::script('/assets/plugins/datatables/jquery.dataTables.min.js') !!}
-    {!! Html::script('/assets/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js') !!}
-    {!! Html::script('/assets/plugins/datatables-responsive/js/dataTables.responsive.min.js') !!}
-    {!! Html::script('/assets/plugins/datatables-responsive/js/responsive.bootstrap4.min.js') !!}
-    {!! Html::script('/assets/plugins/datatables-buttons/js/dataTables.buttons.min.js') !!}
-    {!! Html::script('/assets/plugins/datatables-buttons/js/buttons.bootstrap4.min.js') !!}
-    {!! Html::script('/assets/plugins/jszip/jszip.min.js') !!}
-    {!! Html::script('/assets/plugins/pdfmake/pdfmake.min.js') !!}
-    {!! Html::script('/assets/plugins/pdfmake/vfs_fonts.js') !!}
-    {!! Html::script('/assets/plugins/datatables-buttons/js/buttons.html5.min.js') !!}
-    {!! Html::script('/assets/plugins/datatables-buttons/js/buttons.print.min.js') !!}
-    {!! Html::script('/assets/plugins/datatables-buttons/js/buttons.colVis.min.js') !!}
+    <!-- extra scripts -->
 @endpush
 
 @push('custom-scripts')
