@@ -1,10 +1,7 @@
 @extends('layout.master')
 
 @push('plugin-styles')
-    <!-- DataTables -->
-    {!! Html::style('/assets/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css') !!}
-    {!! Html::style('/assets/plugins/datatables-responsive/css/responsive.bootstrap4.min.css') !!}
-    {!! Html::style('/assets/plugins/datatables-buttons/css/buttons.bootstrap4.min.css') !!}
+    <!-- extra styles -->
     
 @endpush
 
@@ -30,7 +27,7 @@
         </div><!-- /.container-fluid -->
     </section>
 
-    <!-- add category section -->
+    <!-- add coupon section -->
     <section class="content">
         <div class="row">
             <div class="col-md-12">
@@ -51,37 +48,53 @@
                             <label for="inputName">Coupon Title</label>
                             <input type="text" id="title" name="title" class="form-control" required placeholder="Enter coupon title here e.g 10% discount on property rental"/>
                         </div>
-                        <!-- coupon start Date and time -->
                         <div class="form-group">
-                        <label>Coupon Start Date and time</label>
-                            <div class="input-group date" id="couponstartdatetime" data-target-input="nearest">
-                                <input type="text" class="form-control datetimepicker-input" data-target="#reservationdatetime"/>
+                            <label for="inputName">Coupon Code</label>
+                            <div class="input-group">
+                                <input type="text" id="coupon_code" name="coupon_code" class="form-control" required readonly placeholder="Coupon code would appear here"/>
+                                <div class="input-group-append">
+                                        <!-- <input type="button" class="btn btn-success" id="coupon_generate_button"/> -->
+                                        <button class="btn btn-sm btn-success" id="coupon_generate_button" >
+                                            <i class="fas fa-sync-alt"></i>
+                                        </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="inputName">Coupon Value</label>
+                            <input type="number" id="value" name="value" class="form-control" required placeholder="Enter coupon value here e.g 1000; 10,000 etc"/>
+                        </div>
+                        
+                        <!-- coupon end Date and time -->
+                        <div class="form-group">
+                        <label>Coupon End Date and time</label>
+                            <div class="input-group date" id="couponenddatetime" data-target-input="nearest">
+                                <input type="datetime-local" required id="expiration_date" name="expiration_date" class="form-control datetimepicker" data-target="#reservationdatetime"/>
                                 <div class="input-group-append" data-target="#reservationdatetime" data-toggle="datetimepicker">
                                     <div class="input-group-text"><i class="fa fa-calendar"></i></div>
                                 </div>
                             </div>
                         </div>
-                        <!-- coupon end Date and time -->
+                        
                         <div class="form-group">
-                        <label>Coupon End Date and time</label>
-                            <div class="input-group date" id="couponenddatetime" data-target-input="nearest">
-                                <input type="text" class="form-control datetimepicker-input" data-target="#reservationdatetime"/>
-                                <div class="input-group-append" data-target="#reservationdatetime" data-toggle="datetimepicker">
-                                    <div class="input-group-text"><i class="fa fa-calendar"></i></div>
-                                </div>
-                            </div>
+                            <label for="inputName">Number of times coupon can be used </label>
+                            <input type="number" id="total_use_allowed" name="total_use_allowed" class="form-control" required placeholder="Enter number of times this coupon can be used here e.g 1, 10, 20 etc"/>
                         </div>
                         <div class="form-group">
                             <label for="exampleInputFile">Coupon image</label>
                             <div class="input-group">
                             <div class="custom-file">
-                                <input type="file" class="custom-file-input" required name="img" id="img"/>
+                                <input type="file" class="custom-file-input" name="img" id="img"/>
                                 <label class="custom-file-label" for="exampleInputFile">Choose file</label>
                             </div>
                             <div class="input-group-append">
                                 <span class="input-group-text">Upload</span>
                             </div>
                             </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="description">Coupon Description</label>
+                            <textarea id="description" name="description" class="form-control" rows="4"></textarea>
                         </div>
                         <div class="form-group">
                             <label for="inputStatus">Status</label>
@@ -105,26 +118,34 @@
         </div>
         </form>
     </section>
-    <!-- /.end add category section -->
+    <!-- /.end add coupon section -->
 
 
-    <!-- category details -->
+    <!-- coupon details -->
     <section class="content">
         <div class="container-fluid">
             <div class="row">
                 <div class="col-12">
                     <div class="card">
                         <div class="card-header">
-                            <h3 class="card-title">Category List</h3>
+                            <h3 class="card-title">Coupon List</h3>
                         </div>
                         <!-- /.card-header -->
                         <div class="card-body">
-                            <table id="category-table" class="table table-bordered table-striped">
+                            <table id="coupon-table" class="table table-bordered table-striped">
                                 <thead>
                                     <tr>
                                         <th>S/N</th>
-                                        <th>Category Title</th>
+                                        <th>Coupon Title</th>
+                                        <th> Coupon Code</th>
+                                        <th>Value</th>
+                                        <th>Total Discount Given</th>
+                                        <th>Total Current Use</th>
+                                        <th>Total Usuage Allowed</th>
                                         <th>Image</th>
+                                        <th>Created Date</th>
+                                        <th>Expiring Date</th>
+                                        <th>Description</th>
                                         <th>Status</th>
                                         <th>Action</th>
                                     </tr>
@@ -134,7 +155,16 @@
                                     <tr>
                                         <td>{{ $loop->iteration }}</td>
                                         <td> {{$data->title}} </td>
-                                        <td><img src="{{ asset('assets/uploads/category/'.$data->img) }}"  alt="category image" width="50" height="50"/></td>
+                                        <td> {{$data->coupon_code}} </td>
+                                        <td> {{$data->value}} </td>
+                                        <td> {{$data->total_discount_given}} </td>
+                                        <td> {{$data->total_current_use}} </td>
+                                        <td> {{$data->total_use_allowed}} </td>
+                                        <td><img src="{{ asset('assets/uploads/coupon/'.$data->img) }}"  alt="coupon image" width="50" height="50"/></td>
+                                        
+                                        <td> {{$data->created_at}} </td>
+                                        <td> {{$data->expiration_date}} </td>
+                                        <td> {{$data->description}} </td>
                                         <td> 
                                             @if($data->status == 'active')
                                             <span class="badge badge-success">{{$data->status}}</span>
@@ -156,8 +186,16 @@
                                 <tfoot>
                                     <tr>
                                         <th>S/N</th>
-                                        <th>Category Title</th>
+                                        <th>Coupon Title</th>
+                                        <th> Coupon Code</th>
+                                        <th>Value</th>
+                                        <th>Total Discount Given</th>
+                                        <th>Total Current Use</th>
+                                        <th>Total Usuage Allowed</th>
                                         <th>Image</th>
+                                        <th>Created Date</th>
+                                        <th>Expiring Date</th>
+                                        <th>Description</th>
                                         <th>Status</th>
                                         <th>Action</th>
                                     </tr>
@@ -174,7 +212,7 @@
         </div>
         <!-- /.end category container-fluid -->
     </section>
-    <!-- /.end category details -->
+    <!-- /.end coupon details -->
 
 </div>
 <!-- /.content-wrapper -->
@@ -194,22 +232,44 @@
                     <input type="hidden" name="id" id="id" />
 
                     <div class="form-group">
-                        <label for="inputName">Category Title</label>
-                        <input type="text" id="title_edit" name="title_edit" class="form-control" required placeholder="Enter category title here"/>
+                        <label for="title">Coupon Title</label>
+                        <input type="text" id="title_edit" name="title_edit" class="form-control" required placeholder="Enter coupon title here e.g 10% discount on property rental"/>
                     </div>
                     <div class="form-group">
-                        <label for="countryFlag">Category Image</label>
+                        <label for="inputName">Coupon Value</label>
+                        <input type="number" id="value_edit" name="value_edit" class="form-control" required placeholder="Enter coupon value here e.g 1000; 10,000 etc"/>
+                    </div>
+                    <div class="form-group">
+                        <label for="inputName">Number of times coupon can be used </label>
+                        <input type="number" id="total_use_allowed_edit" name="total_use_allowed_edit" class="form-control" required placeholder="Enter number of times this coupon can be used here e.g 1, 10, 20 etc"/>
+                    </div>
+                    <!-- coupon end Date and time -->
+                    <div class="form-group">
+                    <label>Coupon End Date and time</label>
+                        <div class="input-group date" id="couponenddatetime" data-target-input="nearest">
+                            <input type="datetime-local" required id="expiration_date_edit" name="expiration_date_edit" class="form-control datetimepicker" data-target="#reservationdatetime"/>
+                            <div class="input-group-append" data-target="#reservationdatetime" data-toggle="datetimepicker">
+                                <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="couponImage">Coupon Image</label>
                         <br />
-                        <small style="color:red;"> leave blank if you do not wish to change category image </small>
+                        <small style="color:red;"> leave blank if you do not wish to change coupon image </small>
                         <div class="input-group">
                             <div class="custom-file">
-                                <input type="file" class="custom-file-input" placeholder="leave blank if you do not wish to change category image" name="img_edit" id="img_edit"/>
-                                <label class="custom-file-label" for="countryFlag">Choose file</label>
+                                <input type="file" class="custom-file-input" placeholder="leave blank if you do not wish to change coupon image" name="img_edit" id="img_edit"/>
+                                <label class="custom-file-label" for="couponImage">Choose file</label>
                             </div>
                             <div class="input-group-append">
                                 <span class="input-group-text">Upload</span>
                             </div>
                         </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="description">Coupon Description</label>
+                        <textarea id="description_edit" name="description_edit" class="form-control" rows="4"></textarea>
                     </div>
                     <div class="form-group">
                         <label for="inputStatus">Status</label>
@@ -250,7 +310,7 @@
                     <input class="form-control" maxlength="6" required type="text" id="deleteConfirmationInput"/>
                 </div>
                 <div class="mt-2">
-                    <p>This action is irreversible. Are you sure you want to permanently delete this department?</p>
+                    <p>This action is irreversible. Are you sure you want to permanently delete this coupon?</p>
                 </div>
             </div>
             <div class="modal-footer justify-content-between">
@@ -266,20 +326,8 @@
 @endsection
 
 @push('plugin-scripts')
-    {!! Html::script('/assets/plugins/datatables/jquery.dataTables.min.js') !!}
-    {!! Html::script('/assets/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js') !!}
-    {!! Html::script('/assets/plugins/datatables-responsive/js/dataTables.responsive.min.js') !!}
-    {!! Html::script('/assets/plugins/datatables-responsive/js/responsive.bootstrap4.min.js') !!}
-    {!! Html::script('/assets/plugins/datatables-buttons/js/dataTables.buttons.min.js') !!}
-    {!! Html::script('/assets/plugins/datatables-buttons/js/buttons.bootstrap4.min.js') !!}
-    {!! Html::script('/assets/plugins/jszip/jszip.min.js') !!}
-    {!! Html::script('/assets/plugins/pdfmake/pdfmake.min.js') !!}
-    {!! Html::script('/assets/plugins/pdfmake/vfs_fonts.js') !!}
-    {!! Html::script('/assets/plugins/datatables-buttons/js/buttons.html5.min.js') !!}
-    {!! Html::script('/assets/plugins/datatables-buttons/js/buttons.print.min.js') !!}
-    {!! Html::script('/assets/plugins/datatables-buttons/js/buttons.colVis.min.js') !!}
-    {!! Html::script('/assets/plugins/jquery-ui/jquery-ui.min.js') !!}
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.5.0/js/bootstrap-datepicker.js"></script>
+    <!-- extra scripts -->
+    
 @endpush
 
 @push('custom-scripts')
@@ -287,26 +335,41 @@
     <script>
         $(document).ready(function () 
         {
-            
+            var deleteFormId;
 
-            $(function () 
+            // Function to generate a random string of letters for coupon code
+            function generateRandomString(length) 
             {
-                //Date and time picker
-                $('#couponenddatetime').datetimepicker({ icons: { time: 'far fa-clock' } });
-                $('#couponstartdatetime').datetimepicker({ icons: { time: 'far fa-clock' } });
+                const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
+                let result = '';
+                for (let i = 0; i < length; i++) {
+                    const randomIndex = Math.floor(Math.random() * chars.length);
+                    result += chars.charAt(randomIndex);
+                }
+                return result;
+            }
+
+            //generate coupon code
+            $("#coupon_generate_button").click(function (e) 
+            {
+                e.preventDefault();
+
+                const couponCode = generateRandomString(8); // Generate an 8-character code
+
+                $('#coupon_code').val(couponCode); // Set the value in the coupon_code input field
             });
             
             $(function () {
-                $("#category-table").DataTable({
+                $("#coupon-table").DataTable({
                     "responsive": true,
                     "lengthChange": false,
                     "autoWidth": false,
                     "buttons": ["excel", "pdf", "print", "colvis"]
-                }).buttons().container().appendTo('#category-table_wrapper .col-md-6:eq(0)');
+                }).buttons().container().appendTo('#coupon-table_wrapper .col-md-6:eq(0)');
             });
 
             // assign an ID to be deleted
-            $('#category-table').on('click', '.deleteBtn', function () {
+            $('#coupon-table').on('click', '.deleteBtn', function () {
                 event.preventDefault(); // Prevent the default form submission
 
                 deleteFormId = $(this).data('id'); // Store the form ID in the deleteFormId variable
@@ -328,7 +391,7 @@
 
                     // Send an AJAX request to delete the item
                     $.ajax({
-                        url: '{{ route("delete-category", ["id" => ":id"]) }}'.replace(':id', deleteFormId),
+                        url: '{{ route("delete-coupon", ["id" => ":id"]) }}'.replace(':id', deleteFormId),
                         type: 'DELETE',
                         data: {
                             _token: '{{ csrf_token() }}'
@@ -357,13 +420,13 @@
             });
 
             // Event handler for edit button click
-            $('#category-table').on('click', '.mr-1', function () 
+            $('#coupon-table').on('click', '.mr-1', function () 
             {
                 var itemId = $(this).data('id');
 
                 // Make AJAX request to fetch item details
                 $.ajax({
-                    url: '{{ route("load-category-details", ["id" => ":id"]) }}'.replace(':id', itemId),
+                    url: '{{ route("load-coupon-details", ["id" => ":id"]) }}'.replace(':id', itemId),
                     type: 'GET',
                     dataType: 'json',
                     success: function(response) {
@@ -371,6 +434,12 @@
                         // Populate the form fields with fetched data
                         $('#id').val(response.data.id);
                         $('#title_edit').val(response.data.title);
+
+                        $('#value_edit').val(response.data.value);
+                        $('#expiration_date_edit').val(response.data.expiration_date);
+                        $('#description_edit').val(response.data.description);
+                        $('#total_use_allowed_edit').val(response.data.total_use_allowed);
+
                         $('#status_edit').val(response.data.status).trigger('change');
 
                     },
@@ -391,7 +460,7 @@
                 
                 // Perform AJAX request to update university data
                 $.ajax({
-                    url: '{{route("update-category")}}',
+                    url: '{{route("update-coupon")}}',
                     type: 'POST',
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
@@ -419,7 +488,6 @@
                     },
                     error: function(xhr, status, error) {
                         toastr.error(error);
-                        console.log(xhr);
                     }
                 });
             });

@@ -11,16 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('coupons', function (Blueprint $table) {
+        Schema::create('payment_methods', function (Blueprint $table) {
             $table->id();
             $table->string('title');
-            $table->string('coupon_code');
-            $table->bigInteger('value');
-            $table->bigInteger('total_discount_given')->default(0);
-            $table->bigInteger('total_current_use')->default(0);
-            $table->bigInteger('total_use_allowed');
-            $table->timestamp('expiration_date');
+            $table->longText('attributes');
             $table->text('img')->nullable();
+            $table->tinyInteger('show_on_mobile')->default(0);
             $table->longText('description')->nullable();
             $table->enum('status', ['active', 'inactive', 'deleted']);
             $table->timestamps();
@@ -32,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('coupons');
+        Schema::dropIfExists('payment_methods');
     }
 };

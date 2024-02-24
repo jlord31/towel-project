@@ -57,6 +57,13 @@ Route::group(['middleware' => 'auth:admin', 'prefix' => 'admin'], function(){
     Route::get('/coupon/load-coupon-details/{id}',[MainController::class,'loadCouponDetails'])->name('load-coupon-details');
     Route::post('/coupon/update-coupon',[MainController::class,'updateCoupon'])->name('update-coupon');
 
+    // payment management routes
+    Route::get('/payment',[MainController::class,'paymentView'])->name('payment');
+    Route::post('/payment/update-status/{id}',[MainController::class,'updateMobilePaymentStatus'])->name('update-mobile-payment-status');
+    Route::delete('/delete-payment/{id}', [MainController::class,'deletePayment'])->name('delete-payment');
+    Route::get('/coupon/load-payment-details/{id}',[MainController::class,'loadPaymentDetails'])->name('load-payment-details');
+    Route::post('/coupon/update-payment',[MainController::class,'updatePayment'])->name('update-payment');
+
     Route::view('/change-password','change-password');
     Route::get('/change-password',[MainController::class,'changePasswordView'])->name('change-password');
     Route::post('/change-password',[MainController::class,'changePassword'])->name('change-password');
