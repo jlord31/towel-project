@@ -64,14 +64,14 @@ Route::group(['middleware' => 'auth:admin', 'prefix' => 'admin'], function(){
     Route::get('/coupon/load-payment-details/{id}',[MainController::class,'loadPaymentDetails'])->name('load-payment-details');
     Route::post('/coupon/update-payment',[MainController::class,'updatePayment'])->name('update-payment');
 
-    Route::view('/change-password','change-password');
-    Route::get('/change-password',[MainController::class,'changePasswordView'])->name('change-password');
-    Route::post('/change-password',[MainController::class,'changePassword'])->name('change-password');
 
-    // Route::view('/settings','admin.settings');
-    Route::get('/settings',[AdminUserController::class,'SettingsView'])->name('admin.settings');
-    Route::post('/settings',[AdminUserController::class,'Settings'])->name('admin.settings');
-    Route::post('/settings/notification-settings',[AdminUserController::class,'notificationSettings'])->name('admin.notification-settings');
+    // admin settings route
+    Route::get('/settings',[MainController::class,'SettingsView'])->name('settings');
+    Route::post('/settings',[MainController::class,'Settings'])->name('settings');
 
+    //Route::view('/change-password','change-password');
+    //Route::get('/change-password',[MainController::class,'changePasswordView'])->name('change-password');
+    Route::post('/settings/change-password',[MainController::class,'changePassword'])->name('change-password');
+    
     
 });
