@@ -68,37 +68,6 @@ class MainController extends Controller
         return view("dashboard");
     }
 
-    function changePasswordView()
-    {
-        return view("change-password");
-
-    }
-
-    function changePassword(Request $req)
-    {
-        if (Auth::guard('admin')->check()) 
-        {
-            $req->validate([
-                'password'=>'required|min:4|confirmed',
-                'password_confirmation'=>'required|min:4'
-            ]);
-
-            $new_password = Hash::make($req->password);
-
-            $userId = Auth::guard("admin")->user()->id;
-
-            $update_password = Admin::where('id', $userId)->update(['password' => $new_password]);
-
-            if($update_password)
-            {
-                return redirect()->back()->with('success', 'Password updated successfully');
-            }
-            else
-            {
-                return redirect()->back()->withErrors([ 'Unable to update password']);
-            }
-        }
-    }
 
     function countryView() 
     {
@@ -531,4 +500,103 @@ class MainController extends Controller
         return response()->json(['message' => 'Successfully deleted Payment Method']);
     }
 
+    function SettingsView() 
+    {
+        return view("settings");
+    }
+
+    function Settings(Request $req)
+    {   
+        try 
+        {
+            $req->validate([
+                'username'=>'required'
+            ]);
+
+            $userId = Auth::guard("admin")->user()->id;
+
+            $userlog = Admin::where(['id'=>$userId])->first();
+            
+            if($req->file()) 
+            {
+                // Get the old image path
+                $oldImagePath = public_path('assets/uploads/admin/profile/' . $userlog->image);
+
+                // Delete the old image if it exists
+                if (File::exists($oldImagePath)) {
+                    File::delete($oldImagePath);
+                }
+
+                $fileName = time().'_'.$req->image->getClientOriginalName();
+                $filePath = $req->file('image')->move(public_path('assets/uploads/admin/profile'),$fileName);
+ 
+                $update_settings = Admin::where('id', $userId)->update([
+                    'username' => $req->username,
+                    'image' => $fileName
+                ]);
+
+                if($update_settings){
+                    return redirect()->back()->with('success', 'Account updated successfully with profile pictuure');
+                }
+                else{
+                    return redirect()->back()->withErrors([ 'Unable to update account with profile picture']);
+                }
+            }
+
+            $update_settings = Admin::where('id', $userId)->update([
+                'username' => $req->username
+            ]);
+
+            if($update_settings)
+            {
+                
+                return redirect()->back()->with('success', 'Account updated successfully');
+            }
+            else{
+                return redirect()->back()->withErrors([ 'Unable to update account']);
+            }
+        } 
+        catch (ValidationException $e) 
+        {
+            // Handle validation errors
+            $errorMessage = $e->getMessage(); // Get the error message
+            Session::flash('error', $errorMessage);
+            return back();
+        }
+       
+    }
+
+    function changePassword(Request $req)
+    {
+        try 
+        {
+            $req->validate([
+                'password'=>'required|min:4|confirmed',
+                'password_confirmation'=>'required|min:4'
+            ]);
+
+            $new_password = Hash::make($req->password);
+
+            $userId = Auth::guard("admin")->user()->id;
+
+            $update_password = Admin::where('id', $userId)->update(['password' => $new_password]);
+
+            if($update_password)
+            {
+                
+                return redirect()->back()->with('success', 'Password updated successfully');
+            }
+            else{
+                return redirect()->back()->withErrors([ 'Unable to update password']);
+            }
+        } 
+        catch (ValidationException $e) 
+        {
+            // Handle validation errors
+            $errorMessage = $e->getMessage(); // Get the error message
+            Session::flash('error', $errorMessage);
+            return back();
+        }  
+        
+    }
 }
