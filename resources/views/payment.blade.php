@@ -234,7 +234,7 @@
                 }).buttons().container().appendTo('#payment-table_wrapper .col-md-6:eq(0)');
             });
 
-             // activate or deactivate mobile payment list
+            // activate or deactivate mobile payment list
             $("#showOnMobileBtn").click(function(){
                 var id = $(this).data('id');
                 $.ajax({

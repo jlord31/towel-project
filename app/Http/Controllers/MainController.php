@@ -15,6 +15,7 @@ use App\Models\Country;
 use App\Models\Category;
 use App\Models\Coupon;
 use App\Models\PaymentMethod;
+use App\Models\User;
 
 use Brian2694\Toastr\Facades\Toastr;
 
@@ -598,5 +599,35 @@ class MainController extends Controller
             return back();
         }  
         
+    }
+
+    function userListView() 
+    {
+        $users = User::where([['status', '!=', 'deleted']])->get();
+
+        return view("user-list", compact('users'));  
+    }
+
+    function updateUserStatus($id)
+    {
+        $item = User::findOrFail($id);
+        
+        // // Get the current status from the database
+        $currentStatus = User::where('id', $item->id)->value('status');
+
+        // // Update the status based on its current value
+        if ($currentStatus == 'active') 
+        {
+            User::where('id', $item->id)->update(['status' => 'inactive']);
+            $newStatus = 'inactive';
+        } 
+        else 
+        {
+            User::where('id', $item->id)->update(['status' => 'active']);
+            $newStatus = 'active';
+        }
+
+        // Return a JSON response indicating success or failure
+        return response()->json(['status' => 'success', 'new_status' => $newStatus]);
     }
 }
