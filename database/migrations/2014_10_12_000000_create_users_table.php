@@ -17,6 +17,11 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
+            $table->string('ccode');
+            $table->string('mobile');
+            $table->string('refercode')->unique();
+            $table->string('parentcode')->nullable();
+            $table->string('pro_pic');
             $table->enum('status', ['active', 'inactive', 'deleted']);
             $table->rememberToken();
             $table->timestamps();

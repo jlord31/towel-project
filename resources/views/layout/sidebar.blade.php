@@ -51,19 +51,19 @@
           </a>
         </li>
         <li class="nav-item">
-          <a href="{{ route('dashboard') }}" class="nav-link {{ active_class(['*dashboard*']) }}">
+          <a href="{{ route('enquiries') }}" class="nav-link {{ active_class(['*enquiries*']) }}">
             <i class="fas fa-question-circle nav-icon"></i>
             <p>Enquiries</p>
           </a>
         </li>
         <li class="nav-item">
-          <a href="{{ route('dashboard') }}" class="nav-link {{ active_class(['*dashboard*']) }}">
+          <a href="{{ route('payout-list') }}" class="nav-link {{ active_class(['*payout-list*']) }}">
             <i class="fas fa-money-check-alt nav-icon"></i>
             <p>Payout List</p>
           </a>
         </li>
         <li class="nav-item">
-          <a href="{{ route('dashboard') }}" class="nav-link {{ active_class(['*dashboard*']) }}">
+          <a href="{{ route('property') }}" class="nav-link {{ active_class(['*property*']) }}">
             <i class="fas fa-building nav-icon"></i>
             <p>Properties</p>
           </a>
@@ -75,13 +75,13 @@
           </a>
         </li>
         <li class="nav-item">
-          <a href="{{ route('dashboard') }}" class="nav-link {{ active_class(['*dashboard*']) }}">
+          <a href="{{ route('booking') }}" class="nav-link {{ active_class(['*booking*']) }}">
             <i class="fas fa-calendar-check nav-icon"></i>
             <p>Booking</p>
           </a>
         </li>
         <li class="nav-item">
-          <a href="{{ route('dashboard') }}" class="nav-link {{ active_class(['*dashboard*']) }}">
+          <a href="{{ route('user-list') }}" class="nav-link {{ active_class(['*user-list*']) }}">
             <i class="fas fa-users nav-icon"></i>
             <p>User List</p>
           </a>

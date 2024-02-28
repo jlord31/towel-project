@@ -21,6 +21,12 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'ccode',
+        'mobile',
+        'refercode',
+        'parentcode',
+        'pro_pic',
+        'status'
     ];
 
     /**

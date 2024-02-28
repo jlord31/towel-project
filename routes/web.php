@@ -64,6 +64,26 @@ Route::group(['middleware' => 'auth:admin', 'prefix' => 'admin'], function(){
     Route::get('/coupon/load-payment-details/{id}',[MainController::class,'loadPaymentDetails'])->name('load-payment-details');
     Route::post('/coupon/update-payment',[MainController::class,'updatePayment'])->name('update-payment');
 
+    // user list management routes
+    Route::get('/user-list',[MainController::class,'userListView'])->name('user-list');
+    Route::post('/user/update-status/{id}',[MainController::class,'updateUserStatus'])->name('update-user-status');
+
+    // enquiries route
+    //Route::get('/enquiries',[MainController::class,'enquiriesView'])->name('enquiries');
+    Route::view('/enquiries','enquiries')->name('enquiries');
+    
+    // booking route
+    //Route::get('/booking',[MainController::class,'bookingView'])->name('booking');
+    Route::view('/booking','booking')->name('booking');
+
+    // payout-list route
+    //Route::get('/payout-list',[MainController::class,'payoutListView'])->name('payout-list');
+    Route::view('/payout-list','payout-list')->name('payout-list');
+
+    // property route
+    //Route::get('/property',[MainController::class,'propertyView'])->name('property');
+    Route::view('/property','property')->name('property');
+    
 
     // admin settings route
     Route::get('/settings',[MainController::class,'SettingsView'])->name('settings');
