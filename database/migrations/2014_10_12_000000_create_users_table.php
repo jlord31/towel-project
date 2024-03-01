@@ -21,7 +21,7 @@ return new class extends Migration
             $table->string('mobile');
             $table->string('refercode')->unique();
             $table->string('parentcode')->nullable();
-            $table->string('pro_pic');
+            $table->string('pro_pic')->nullable();
             $table->enum('status', ['active', 'inactive', 'deleted']);
             $table->rememberToken();
             $table->timestamps();

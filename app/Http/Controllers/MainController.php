@@ -16,6 +16,7 @@ use App\Models\Category;
 use App\Models\Coupon;
 use App\Models\PaymentMethod;
 use App\Models\User;
+use App\Models\Report;
 
 use Brian2694\Toastr\Facades\Toastr;
 
@@ -629,5 +630,32 @@ class MainController extends Controller
 
         // Return a JSON response indicating success or failure
         return response()->json(['status' => 'success', 'new_status' => $newStatus]);
+    }
+
+    function reportsView() 
+    {
+        $reports = Report::where([['status', '!=', 'deleted']])->get();
+
+        return view("reports", compact('reports'));  
+    }
+
+    function updateReportStatus($id) 
+    {
+        $report = Report::findOrFail($id);
+        
+        
+        $update = Report::where('id', $report->id)->update(['status' => 'resolved']);
+
+        if ($update) 
+        {
+           // Return a JSON response indicating success or failure
+            return response()->json(['status' => 'success']);
+        } 
+        else 
+        {
+            // Return a JSON response indicating success or failure
+            return response()->json(['status' => 'error']);
+        }
+       
     }
 }
