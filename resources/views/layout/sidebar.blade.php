@@ -51,9 +51,9 @@
           </a>
         </li>
         <li class="nav-item">
-          <a href="{{ route('enquiries') }}" class="nav-link {{ active_class(['*enquiries*']) }}">
+          <a href="{{ route('reports') }}" class="nav-link {{ active_class(['*reports*']) }}">
             <i class="fas fa-question-circle nav-icon"></i>
-            <p>Enquiries</p>
+            <p>Report</p>
           </a>
         </li>
         <li class="nav-item">

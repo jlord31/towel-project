@@ -34,7 +34,7 @@ Route::get('/admin/logout', function () {
 
 Route::group(['middleware' => 'auth:admin', 'prefix' => 'admin'], function(){
 
-    Route::get('/dashboard',[MainController::class,'dashboard'])->name('dashboard');
+    Route::get('dashboard',[MainController::class,'dashboard'])->name('dashboard');
 
     // country routes
     Route::get('/country',[MainController::class,'countryView'])->name('country');
@@ -71,6 +71,13 @@ Route::group(['middleware' => 'auth:admin', 'prefix' => 'admin'], function(){
     // enquiries route
     //Route::get('/enquiries',[MainController::class,'enquiriesView'])->name('enquiries');
     Route::view('/enquiries','enquiries')->name('enquiries');
+
+    // reports route
+    Route::get('/reports',[MainController::class,'reportsView'])->name('reports');
+    Route::post('/reports/update-report-status/{id}',[MainController::class,'updateReportStatus'])->name('update-report-status');
+    
+    //Route::view('/reports','enquiries')->name('reports');
+    
     
     // booking route
     //Route::get('/booking',[MainController::class,'bookingView'])->name('booking');
