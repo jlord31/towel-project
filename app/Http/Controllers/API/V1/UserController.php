@@ -112,13 +112,62 @@ class UserController extends Controller
         }
     }
 
-    function logout(Request $req)
+    function logout()
     {
-        
+       $user = auth()->user()->token()->revoke();
+
+       if ($user) 
+        {
+            return response()->json(['message' => 'User successfully logged out.'], 200);
+        } 
+        else 
+        {
+            return response()->json(['message' => 'Error occurred when trying to log user out.'], 422);
+        }
+       
     }
 
     function profile()
     {
+        try 
+        {
+            $user = Auth::guard('api')->user();
+
+            return response()->json(['message' => 'User profile data', 'data' => $user], 200);
+        } 
+        catch (UnauthorizedHttpException $e) 
+        {
+            return response()->json(['error' => 'Invalid token.'], 401);
+        }
+        
+    }
+
+    function updateProfile(Request $req)
+    {
+        try 
+        {
+            $user = Auth::guard('api')->user();
+
+            if (!$user) 
+            {
+                return response()->json(['message' => 'Unauthorized user'], 422);
+            } 
+            else 
+            {
+                $userId = $user->id;
+
+                $userlog = User::where(['id'=>$userId])->first();
+
+                return response()->json(['message' => 'User profile data', 'data' => $userlog], 200);
+            }
+            
+
+            
+        } 
+        catch (UnauthorizedHttpException $e) 
+        {
+            return response()->json(['error' => 'Invalid token.'], 401);
+        }
         
     }
 }

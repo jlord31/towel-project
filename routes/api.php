@@ -30,8 +30,8 @@ Route::group(['prefix' => 'v1/user/auth'], function(){
 // protected routes
 Route::group(['middleware' => 'auth:api', 'prefix' => 'v1/user'], function(){
 
-    Route::get('profile',[MainController::class,'profile']);
-    Route::get('logout',[MainController::class,'logout']);
-   
+    Route::get('profile',[UserController::class,'profile']);
+    Route::get('logout',[UserController::class,'logout']);
+    Route::post('profile',[UserController::class,'updateProfile']);
     
 });
