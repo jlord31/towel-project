@@ -32,6 +32,8 @@ Route::group(['middleware' => 'auth:api', 'prefix' => 'v1/user'], function(){
 
     Route::get('profile',[UserController::class,'profile']);
     Route::get('logout',[UserController::class,'logout']);
-    Route::post('profile',[UserController::class,'updateProfile']);
+    Route::post('update-user',[UserController::class,'updateProfile']);
+    Route::post('change-password',[UserController::class,'changePassword']);
+    Route::post('report',[UserController::class,'userReport']);
     
 });
