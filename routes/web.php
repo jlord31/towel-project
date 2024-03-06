@@ -2,6 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\MainController;
+use App\Http\Controllers\PropertyController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -95,8 +97,8 @@ Route::group(['middleware' => 'auth:admin', 'prefix' => 'admin'], function(){
     Route::view('/payout-list','payout-list')->name('payout-list');
 
     // property route
-    //Route::get('/property',[MainController::class,'propertyView'])->name('property');
-    Route::view('/property','property')->name('property');
+    Route::get('/property',[PropertyController::class,'index'])->name('property');
+    //Route::view('/property','property')->name('property');
     
 
     // admin settings route
