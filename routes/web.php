@@ -2,6 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\MainController;
+use App\Http\Controllers\PropertyController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -50,6 +52,13 @@ Route::group(['middleware' => 'auth:admin', 'prefix' => 'admin'], function(){
     Route::get('/category/load-category-details/{id}',[MainController::class,'loadCategoryDetails'])->name('load-category-details');
     Route::post('/category/update-category',[MainController::class,'updateCategory'])->name('update-category');
 
+    // facility routes
+    Route::get('/facility',[MainController::class,'facilityView'])->name('facility');
+    Route::post('/facility',[MainController::class,'saveNewFacility'])->name('facility');
+    Route::delete('/delete-facility/{id}', [MainController::class,'deleteFacility'])->name('delete-facility');
+    Route::get('/facility/load-facility-details/{id}',[MainController::class,'loadFacilityDetails'])->name('load-facility-details');
+    Route::post('/facility/update-facility',[MainController::class,'updateFacility'])->name('update-facility');
+
     // coupon routes
     Route::get('/coupon',[MainController::class,'couponView'])->name('coupon');
     Route::post('/coupon',[MainController::class,'saveNewCoupon'])->name('coupon');
@@ -88,8 +97,8 @@ Route::group(['middleware' => 'auth:admin', 'prefix' => 'admin'], function(){
     Route::view('/payout-list','payout-list')->name('payout-list');
 
     // property route
-    //Route::get('/property',[MainController::class,'propertyView'])->name('property');
-    Route::view('/property','property')->name('property');
+    Route::get('/property',[PropertyController::class,'index'])->name('property');
+    //Route::view('/property','property')->name('property');
     
 
     // admin settings route

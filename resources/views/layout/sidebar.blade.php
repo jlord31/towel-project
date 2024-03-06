@@ -45,6 +45,12 @@
           </a>
         </li>
         <li class="nav-item">
+          <a href="{{ route('facility') }}" class="nav-link {{ active_class(['*facility*']) }}">
+            <i class="fas fa-list-alt nav-icon"></i>
+            <p>Facility</p>
+          </a>
+        </li>
+        <li class="nav-item">
           <a href="{{ route('payment') }}" class="nav-link {{ active_class(['*payment*']) }}">
             <i class="fas fa-credit-card nav-icon"></i>
             <p>Payment Gateway</p>
