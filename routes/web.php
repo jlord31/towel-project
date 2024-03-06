@@ -50,6 +50,13 @@ Route::group(['middleware' => 'auth:admin', 'prefix' => 'admin'], function(){
     Route::get('/category/load-category-details/{id}',[MainController::class,'loadCategoryDetails'])->name('load-category-details');
     Route::post('/category/update-category',[MainController::class,'updateCategory'])->name('update-category');
 
+    // facility routes
+    Route::get('/facility',[MainController::class,'facilityView'])->name('facility');
+    Route::post('/facility',[MainController::class,'saveNewFacility'])->name('facility');
+    Route::delete('/delete-facility/{id}', [MainController::class,'deleteFacility'])->name('delete-facility');
+    Route::get('/facility/load-facility-details/{id}',[MainController::class,'loadFacilityDetails'])->name('load-facility-details');
+    Route::post('/facility/update-facility',[MainController::class,'updateFacility'])->name('update-facility');
+
     // coupon routes
     Route::get('/coupon',[MainController::class,'couponView'])->name('coupon');
     Route::post('/coupon',[MainController::class,'saveNewCoupon'])->name('coupon');

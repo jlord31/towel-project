@@ -17,6 +17,8 @@ use App\Models\Coupon;
 use App\Models\PaymentMethod;
 use App\Models\User;
 use App\Models\Report;
+use App\Models\Facility;
+
 
 use Brian2694\Toastr\Facades\Toastr;
 
@@ -657,5 +659,71 @@ class MainController extends Controller
             return response()->json(['status' => 'error']);
         }
        
+    }
+
+    function facilityView() 
+    {
+        
+        $facilities = Facility::where([['status', '!=', 'deleted']])->get();
+
+        return view("facility", compact('facilities'));  
+    }
+
+    function saveNewFacility(Request $req) 
+    {
+        try 
+        {
+            $req->validate([
+                'title'=>'required|unique:facilities',
+                'img' => 'required',
+                'status' => 'required'
+            ]);
+    
+            
+    
+            if($req->file('img')) 
+            {
+                $fileName = time().'_'.$req->img->getClientOriginalName();
+                $filePath = $req->file('img')->move(public_path('assets/uploads/facility/'),$fileName);
+
+                $data = $req->all();
+                $data['img'] = $fileName; // Modify filename
+
+                $add_new_category = Facility::create($data);
+
+                if ($add_new_category) 
+                {
+                    Session::flash('success', 'successfully added a new facility');
+                    return back();
+                } 
+                else 
+                {
+                    Session::flash('error', 'Error occurred when tring to add a new facility');
+                    return back();
+                }
+            }
+        } 
+        catch (ValidationException $e) 
+        {
+            // Handle validation errors
+            $errorMessage = $e->getMessage(); // Get the error message
+            Session::flash('error', $errorMessage);
+            return back();
+        }
+    }
+
+    function deleteFacility($id) 
+    {
+        
+    }
+
+    function loadFacilityDetails($id) 
+    {
+        
+    }
+
+    function updateFacility($id) 
+    {
+        
     }
 }

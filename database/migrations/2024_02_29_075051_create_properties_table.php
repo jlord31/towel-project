@@ -13,6 +13,25 @@ return new class extends Migration
     {
         Schema::create('properties', function (Blueprint $table) {
             $table->id();
+            $table->integer('country_id');
+            $table->string('title');
+            $table->string('type');
+            $table->string('address');
+            $table->string('capacity');
+            $table->string('facility');
+            $table->string('beds');
+            $table->string('bathroom');
+            $table->string('sqrft')->default(0);
+            $table->string('rate')->default(0);
+            $table->string('people_limit');
+            $table->string('latitude');
+            $table->string('longtitude');
+            $table->bigInteger('actual_price');
+            $table->bigInteger('customer_price');
+            $table->bigInteger('company_profit');
+            $table->string('image');
+            $table->longText('description');
+            $table->enum('status', ['active', 'inactive', 'deleted']);
             $table->timestamps();
         });
     }
