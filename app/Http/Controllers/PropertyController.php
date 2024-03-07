@@ -30,10 +30,12 @@ class PropertyController extends Controller
     /**
      * Display a listing of the resource.
      */
+
+    // display property page
     public function index()
     {
         //
-        Route::view('/property','property')->name('property');
+        return view("property");
     }
 
     /**
