@@ -122,11 +122,13 @@
       });
 
       // activate or deactivate mobile payment list
-      $("#resolveBtn").click(function()
+      $('#report-table').on('click', '#resolveBtn', function () 
       {
         var id = $(this).data('id');
 
         var statusText = $('#resolveBtn span').text();
+
+        console.log(statusText);
 
         if (statusText == 'resolved') 
         {
@@ -171,3 +173,5 @@
 
   </script>
 @endpush
+
+
