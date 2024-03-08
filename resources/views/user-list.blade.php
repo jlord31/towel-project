@@ -136,10 +136,12 @@
         }).buttons().container().appendTo('#user-table_wrapper .col-md-6:eq(0)');
       });
 
-      // activate or deactivate mobile payment list
-      $("#showOnMobileBtn").click(function()
+      // activate or deactivate user account
+      $('#user-table').on('click', '.btn', function () 
       {
+        var button = $(this); // Store the clicked button for future reference
         var id = $(this).data('id');
+        var spanElement = $(this).find('span');
 
         $.ajax({
           url: '{{ route("update-user-status", ["id" => ":id"]) }}'.replace(':id', id),
@@ -154,22 +156,19 @@
               if (response.new_status == 'active') 
               {
                 // Update the button to payment method is active on mobile
-                
-                $('#showOnMobileBtn').removeClass('btn-white').addClass('btn-white');
-                var injected = '<span class="badge badge-success">active</span>';
-                $('#showOnMobileBtn').html(injected);
+
+                // Replace text and class of the span
+                spanElement.text('active').removeClass('badge badge-warning').addClass('badge badge-success');
 
                 toastr.success('user is now active');
               } 
               else 
               {
                 // Update the button so that payment is not shown on mobile
-                
-                $('#showOnMobileBtn').removeClass('btn-white').addClass('btn-white');
-                // $('#'+staff_id).text("activate");
-                var injected = '<span class="badge badge-warning">inactive</span>';
-                $('#showOnMobileBtn').html(injected);
 
+                // Replace text and class of the span
+                spanElement.text('inactive').removeClass('badge badge-success').addClass('badge badge-warning');
+              
                 toastr.warning('User is now inactive');
               }
             } 

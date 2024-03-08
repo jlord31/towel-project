@@ -22,8 +22,8 @@
   {!! Html::style('assets/plugins/select2/css/select2.min.css') !!}
   {!! Html::style('assets/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css') !!}
   {!! Html::style('/assets/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css') !!}
-    {!! Html::style('/assets/plugins/datatables-responsive/css/responsive.bootstrap4.min.css') !!}
-    {!! Html::style('/assets/plugins/datatables-buttons/css/buttons.bootstrap4.min.css') !!}
+  {!! Html::style('/assets/plugins/datatables-responsive/css/responsive.bootstrap4.min.css') !!}
+  {!! Html::style('/assets/plugins/datatables-buttons/css/buttons.bootstrap4.min.css') !!}
 
   {!! Html::style('assets/plugins/fontawesome-free/css/all.min.css') !!}
   {!! Html::style('assets/dist/css/adminlte.min.css') !!}

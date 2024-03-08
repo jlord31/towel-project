@@ -60,12 +60,12 @@
                                         <td> 
                                             @if($data->show_on_mobile == 0)
                                                
-                                                <button id="showOnMobileBtn" name="showOnMobileBtn" data-id="{{$data->id}}" class="btn btn-secondary"> 
+                                                <button id="showOnMobileBtn" name="showOnMobileBtn" data-id="{{$data->id}}" class="btn btn-secondary btn-mobile"> 
                                                     <i class="fa fa-power-off"></i>
                                                 </button>
                                                 
                                             @else
-                                                <button id="showOnMobileBtn" name="showOnMobileBtn" data-id="{{$data->id}}" class="btn btn-success"> 
+                                                <button id="showOnMobileBtn" name="showOnMobileBtn" data-id="{{$data->id}}" class="btn btn-success btn-mobile"> 
                                                     <i class="fa fa-lock"></i>  
                                                 </button>
                                     
@@ -218,6 +218,7 @@
 
 @push('plugin-scripts')
     <!-- extra scripts -->
+    {!! Html::script('assets/plugins/dropzone/min/dropzone.min.js') !!}
 @endpush
 
 @push('custom-scripts')
@@ -235,8 +236,10 @@
             });
 
             // activate or deactivate mobile payment list
-            $("#showOnMobileBtn").click(function(){
-                var id = $(this).data('id');
+            $('.btn-mobile').click(function() {
+                var button = $(this); // Store the clicked button for future reference
+                var id = button.data('id');
+
                 $.ajax({
                     url: '{{ route("update-mobile-payment-status", ["id" => ":id"]) }}'.replace(':id', id),
                     type: 'POST',
@@ -246,37 +249,25 @@
                     success: function(response) {
                         if (response.status == 'success') {
                             if (response.new_status == 1) {
-                                // Update the button to payment method is active on mobile
-                                
-                                $('#showOnMobileBtn').removeClass('btn-secondary').addClass('btn-success');
-                                var injected = '<i class="fa fa-lock">';
-                                $('#showOnMobileBtn').html(injected);
-
-                                toastr.success('Payment method is now avaliable on mobile');
-                            } 
-                            else {
-                                // Update the button so that payment is not shown on mobile
-                                
-                                $('#showOnMobileBtn').removeClass('btn-success').addClass('btn-secondary');
-                                // $('#'+staff_id).text("activate");
-                                var injected = '<i class="fa fa-power-off">';
-                                $('#showOnMobileBtn').html(injected);
+                                button.removeClass('btn-secondary').addClass('btn-success');
+                                button.find('i').attr('class', 'fa fa-lock');
+                                toastr.success('Payment method is now available on mobile');
+                            } else {
+                                button.removeClass('btn-success').addClass('btn-secondary');
+                                button.find('i').attr('class', 'fa fa-power-off');
 
                                 toastr.warning('Payment method has now been removed on mobile');
                             }
-                        } 
-                        else {
-                            // Handle the error
-                            // console.log('error occurred and response status is not success');
-                            toastr.error('error occurred and response status is not success');
+                        } else {
+                            toastr.error('An error occurred and response status is not success');
                         }
                     },
                     error: function(xhr, status, error) {
-                        // Handle the error response, show an error message
                         toastr.error(error);
                     }
                 });
             });
+           
 
             // assign an ID to be deleted
             $('#payment-table').on('click', '.deleteBtn', function () {
@@ -341,7 +332,6 @@
                     dataType: 'json',
                     success: function(response) {
 
-                        console.log(response.data);
                         // Populate the form fields with fetched data
                         $('#id').val(response.data.id);
                         $('#title_edit').val(response.data.title);
@@ -395,10 +385,62 @@
                     },
                     error: function(xhr, status, error) {
                         toastr.error(error);
-                        console.log(xhr);
                     }
                 });
             });
+
+            // DropzoneJS Demo Code Start
+            Dropzone.autoDiscover = false
+
+            // Get the template HTML and remove it from the doumenthe template HTML and remove it from the doument
+            var previewNode = document.querySelector("#template")
+            previewNode.id = ""
+            var previewTemplate = previewNode.parentNode.innerHTML
+            previewNode.parentNode.removeChild(previewNode)
+
+            var myDropzone = new Dropzone(document.body, { // Make the whole body a dropzone
+            url: "/target-url", // Set the url
+            thumbnailWidth: 80,
+            thumbnailHeight: 80,
+            parallelUploads: 20,
+            previewTemplate: previewTemplate,
+            autoQueue: false, // Make sure the files aren't queued until manually added
+            previewsContainer: "#previews", // Define the container to display the previews
+            clickable: ".fileinput-button" // Define the element that should be used as click trigger to select files.
+            })
+
+            myDropzone.on("addedfile", function(file) {
+            // Hookup the start button
+            file.previewElement.querySelector(".start").onclick = function() { myDropzone.enqueueFile(file) }
+            })
+
+            // Update the total progress bar
+            myDropzone.on("totaluploadprogress", function(progress) {
+            document.querySelector("#total-progress .progress-bar").style.width = progress + "%"
+            })
+
+            myDropzone.on("sending", function(file) {
+            // Show the total progress bar when upload starts
+            document.querySelector("#total-progress").style.opacity = "1"
+            // And disable the start button
+            file.previewElement.querySelector(".start").setAttribute("disabled", "disabled")
+            })
+
+            // Hide the total progress bar when nothing's uploading anymore
+            myDropzone.on("queuecomplete", function(progress) {
+            document.querySelector("#total-progress").style.opacity = "0"
+            })
+
+            // Setup the buttons for all transfers
+            // The "add files" button doesn't need to be setup because the config
+            // `clickable` has already been specified.
+            document.querySelector("#actions .start").onclick = function() {
+            myDropzone.enqueueFiles(myDropzone.getFilesWithStatus(Dropzone.ADDED))
+            }
+            document.querySelector("#actions .cancel").onclick = function() {
+            myDropzone.removeAllFiles(true)
+            }
+            // DropzoneJS Demo Code End
 
         });
 
