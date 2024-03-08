@@ -60,12 +60,12 @@
                                     <td>
                                       @if($data->status == 'resolved')
                                               
-                                      <button id="resolveBtn" name="resolveBtn" data-id="{{$data->id}}" class="btn btn-white"> 
+                                      <button id="resolveBtn-{{ $data->id }}" name="resolveBtn-{{ $data->id }}" data-id="{{$data->id}}" class="btn btn-white"> 
                                         <span class="badge badge-success">{{$data->status}}</span>
                                       </button>
                                               
                                       @else
-                                      <button id="resolveBtn" name="resolveBtn" data-id="{{$data->id}}" class="btn btn-white"> 
+                                      <button id="resolveBtn-{{ $data->id }}" name="resolveBtn-{{ $data->id }}" data-id="{{$data->id}}" class="btn btn-white"> 
                                         <span class="badge badge-warning">{{$data->status}}</span>
                                       </button>
                                   
@@ -122,11 +122,13 @@
       });
 
       // activate or deactivate mobile payment list
-      $('#report-table').on('click', '#resolveBtn', function () 
+      $('#report-table').on('click', '.btn', function () 
       {
         var id = $(this).data('id');
 
-        var statusText = $('#resolveBtn span').text();
+        var spanElement = $(this).find('span');
+
+        var statusText = spanElement.text();
 
         console.log(statusText);
 
@@ -136,34 +138,33 @@
         } 
         else 
         {
-            $.ajax({
-                url: '{{ route("update-report-status", ["id" => ":id"]) }}'.replace(':id', id),
-                type: 'POST',
-                data: {
-                    _token: '{{ csrf_token() }}'
-                },
-                success: function(response) 
-                {
-                    if (response.status == 'success') 
-                    {
-                        $('#resolveBtn').removeClass('btn-white').addClass('btn-white');
-                        var injected = '<span class="badge badge-success">resolved</span>';
-                        $('#resolveBtn').html(injected);
+          $.ajax({
+              url: '{{ route("update-report-status", ["id" => ":id"]) }}'.replace(':id', id),
+              type: 'POST',
+              data: {
+                  _token: '{{ csrf_token() }}'
+              },
+              success: function(response) 
+              {
+                  if (response.status == 'success') 
+                  {
+                    // Replace text and class of the span
+                    spanElement.text('resolved').removeClass('badge badge-warning').addClass('badge badge-success');
 
-                        toastr.success('This report has now been successfully resolved');
-                    }
-                    else
-                    {
-                    // Handle the error
-                    toastr.error('error occurred and response status is not success');
-                    }
-                },
-                error: function(xhr, status, error) 
-                {
-                    // Handle the error response, show an error message
-                    toastr.error(error);
-                }
-            });
+                    toastr.success('This report has now been successfully resolved');
+                  }
+                  else
+                  {
+                  // Handle the error
+                  toastr.error('error occurred and response status is not success');
+                  }
+              },
+              error: function(xhr, status, error) 
+              {
+                  // Handle the error response, show an error message
+                  toastr.error(error);
+              }
+          });
         }
 
         

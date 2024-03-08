@@ -98,6 +98,7 @@ Route::group(['middleware' => 'auth:admin', 'prefix' => 'admin'], function(){
 
     // property route
     Route::get('/property',[PropertyController::class,'index'])->name('property');
+    Route::post('/property/upload-property',[PropertyController::class,'store'])->name('upload-property');
     //Route::view('/property','property')->name('property');
     
 
