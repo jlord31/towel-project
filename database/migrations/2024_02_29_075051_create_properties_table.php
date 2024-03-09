@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('title');
             $table->string('type');
             $table->string('address');
-            $table->string('capacity');
+            $table->string('city');
             $table->string('facility');
             $table->string('beds');
             $table->string('bathroom');

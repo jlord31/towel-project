@@ -34,8 +34,13 @@ class PropertyController extends Controller
     // display property page
     public function index()
     {
-        //
-        return view("property");
+        $categories = Category::where([['status', '=', 'active']])->get();
+
+        $countries = Country::where([['status', '=', 'active']])->get();
+
+        $facilities = Facility::where([['status', '=', 'active']])->get();
+
+        return view("property", compact('categories', 'countries', 'facilities'));  
     }
 
     /**
@@ -52,7 +57,30 @@ class PropertyController extends Controller
     public function store(Request $req)
     {
         //
-        dd($req->all());
+        //return response()->json(['status' => 'success']);
+
+        // Handle file uploads
+        $uploadedFiles = [];
+        if ($req->hasFile('files')) {
+            foreach ($req->file('files') as $file) {
+                $filename = $file->getClientOriginalName();
+                $uploadedFiles[] = $filename;
+                // Move the file to a desired location if needed
+                // $file->move('path/to/destination', $filename);
+            }
+        }
+
+        // You can also handle other form data if needed
+        $title = $req->input('title');
+        $status = $req->input('status');
+
+        // Return JSON response with file names
+        return response()->json([
+            'uploaded_files' => $uploadedFiles,
+            'title' => $title,
+            'status' => $status,
+        ]);
+        
     }
 
     /**
