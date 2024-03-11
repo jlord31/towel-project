@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 use App\Models\Facility;
+use App\Models\Category;
+use App\Models\Country;
 
 class Property extends Model
 {
@@ -36,5 +38,15 @@ class Property extends Model
     public function facility() 
     {
         return $this->hasMany(Facility::class);
+    }
+
+    public function category() 
+    {
+        return $this->hasMany(Category::class);
+    }
+
+    public function country() 
+    {
+        return $this->hasMany(Country::class);
     }
 }

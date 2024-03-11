@@ -714,16 +714,54 @@ class MainController extends Controller
 
     function deleteFacility($id) 
     {
-        
+        $item = Facility::findOrFail($id);
+        $item->update(['status' => 'deleted']);
+
+        return response()->json(['message' => 'Successfully deleted Facility']);
     }
 
     function loadFacilityDetails($id) 
     {
-        
+        $item = Facility::findOrFail($id);
+
+        return response()->json(['status' => 'success', 'data' => $item]); 
     }
 
-    function updateFacility($id) 
+    function updateFacility(Request $req) 
     {
+        // Retrieve the facility model based on the submitted ID
+        $facility = Facility::findOrFail($req->input('id'));
+
+        if($req->file('img_edit')) 
+        {
+            // Get the old image path
+            $oldImagePath = public_path('assets/images/facility/' . $facility->img);
+
+            // Delete the old image if it exists
+            if (File::exists($oldImagePath)) {
+                File::delete($oldImagePath);
+            }
+
+            $fileName = time().'_'.$req->img_edit->getClientOriginalName();
+            $filePath = $req->file('img_edit')->move(public_path('assets/images/facility/'),$fileName);
+
+            $facility->img = $fileName;
+        }
+
+        // Update specific attributes with the validated data
+        $facility->title = $req->input('title_edit');
+        $facility->status = $req->input('status_edit');
         
+        // Save the updated facility model
+        $save = $facility->save();
+
+        if ($save) 
+        {
+            return response()->json(['status' => 'success', 'data' => 'Successfully updated facility data']);
+        } 
+        else 
+        {
+            return response()->json(['status' => 'error', 'data' => 'Error occurred when trying to update facility data. Please try again later']);
+        }
     }
 }

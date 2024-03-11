@@ -69,15 +69,32 @@
           </a>
         </li>
         <li class="nav-item">
-          <a href="{{ route('property') }}" class="nav-link {{ active_class(['*property*']) }}">
-            <i class="fas fa-building nav-icon"></i>
-            <p>Properties</p>
+          <a href="#" class="nav-link {{ active_class(['*property*']) }}">
+            <i class="nav-icon fas fa-table"></i>
+            <p>
+              Properties
+              <i class="fas fa-angle-left right"></i>
+            </p>
           </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+              <a href="{{ route('add-property') }}" class="nav-link {{ active_class(['*add-property*']) }}">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Add Property</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="{{ route('view-property') }}" class="nav-link {{ active_class(['*view-property*']) }}">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>View Properties</p>
+                </a>
+              </li>
+            </ul>
         </li>
         <li class="nav-item">
           <a href="{{ route('dashboard') }}" class="nav-link {{ active_class(['*dashboard*']) }}">
             <i class="fas fa-images nav-icon"></i>
-            <p>Property Gallery</p>
+            <p>Unavaliable Date</p>
           </a>
         </li>
         <li class="nav-item">

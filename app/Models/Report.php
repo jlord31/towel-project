@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 use App\Models\User;
+use App\Models\Property;
 
 class Report extends Model
 {
@@ -21,5 +22,10 @@ class Report extends Model
     public function user() 
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function property() 
+    {
+        return $this->belongsTo(Property::class);
     }
 }
