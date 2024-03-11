@@ -55,7 +55,7 @@
                                     <td>{{ $loop->iteration }}</td>
                                     <td> {{ $data->user->name }} </td>
                                     <td> {{ $data->user->email }} </td>
-                                    <td> {{ $data->property_id }} </td>
+                                    <td> {{ $data->property->title }} </td>
                                     <td> {{ $data->message }} </td>
                                     <td>
                                       @if($data->status == 'resolved')
@@ -96,7 +96,7 @@
       </div>
       <!-- /.end country container-fluid -->
   </section>
-  <!-- /.end country details -->
+  <!-- /.end report details -->
 </div>
 <!-- /.content-wrapper -->
 

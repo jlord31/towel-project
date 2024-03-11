@@ -5,6 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+use App\Models\Property;
+
 class Category extends Model
 {
     use HasFactory;
@@ -14,4 +16,9 @@ class Category extends Model
         'img',
         'status'
     ];
+
+    public function property() 
+    {
+        return $this->belongsTo(Property::class);
+    }
 }

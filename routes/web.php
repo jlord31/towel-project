@@ -97,8 +97,9 @@ Route::group(['middleware' => 'auth:admin', 'prefix' => 'admin'], function(){
     Route::view('/payout-list','payout-list')->name('payout-list');
 
     // property route
-    Route::get('/property',[PropertyController::class,'index'])->name('property');
+    Route::get('/add-property',[PropertyController::class,'index'])->name('add-property');
     Route::post('/property/upload-property',[PropertyController::class,'store'])->name('upload-property');
+    Route::get('/view-property',[PropertyController::class,'show'])->name('view-property');
     //Route::view('/property','property')->name('property');
     
 

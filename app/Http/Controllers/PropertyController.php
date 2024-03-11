@@ -20,6 +20,7 @@ use App\Models\User;
 use App\Models\Report;
 use App\Models\Facility;
 use App\Models\Property;
+use App\Models\PropertyImages;
 
 class PropertyController extends Controller
 {
@@ -40,7 +41,7 @@ class PropertyController extends Controller
 
         $facilities = Facility::where([['status', '=', 'active']])->get();
 
-        return view("property", compact('categories', 'countries', 'facilities'));  
+        return view("add-property", compact('categories', 'countries', 'facilities'));  
     }
 
     /**
@@ -56,39 +57,84 @@ class PropertyController extends Controller
      */
     public function store(Request $req)
     {
-        //
-        //return response()->json(['status' => 'success']);
+        
+        // Handle file uploads & text
+        //$uploadedFiles = [];
+        if ($req->hasFile('files')) 
+        {
+            foreach ($req->file('files') as $index => $file) 
+            {
+                // Store the first file in the properties table
+                if ($index === 0) 
+                {
+                    if (is_array($req->input('facility'))) 
+                    {
+                        $facility = implode(', ', $req->input('facility'));
+                    } 
+                    else 
+                    {
+                        $facility = $req->input('facility');
+                    }
 
-        // Handle file uploads
-        $uploadedFiles = [];
-        if ($req->hasFile('files')) {
-            foreach ($req->file('files') as $file) {
-                $filename = $file->getClientOriginalName();
-                $uploadedFiles[] = $filename;
-                // Move the file to a desired location if needed
-                // $file->move('path/to/destination', $filename);
+                    $company_profit = (int)$req->input('customer_price') - (int)$req->input('actual_price');
+
+                    $fileName = time().'_'.$file->getClientOriginalName();
+                    $filePath = $file->move(public_path('assets/uploads/properties/'),$fileName);
+
+
+                    $property = new Property();
+                    $property->title = $req->input('title');
+                    $property->description = $req->input('description');
+                    $property->status = $req->input('status');
+                    $property->type = $req->input('type');
+                    $property->country_id = $req->input('country');
+                    $property->city = $req->input('city');
+                    $property->address = $req->input('address');
+                    $property->people_limit = $req->input('people_limit');
+                    $property->customer_price = $req->input('customer_price');
+                    $property->actual_price = $req->input('actual_price');
+                    $property->beds = $req->input('beds');
+                    $property->bathroom = $req->input('bathroom');
+                    $property->facility = $facility;
+                    $property->company_profit = $company_profit;
+                    $property->longtitude = $req->input('longtitude');
+                    $property->latitude = $req->input('latitude');
+
+                    // Store the file in a desired location and set the image column accordingly
+                    $property->image = $fileName; 
+                    $property->save();
+                } 
+                else 
+                {
+                    // Store the rest of the files in the property_images table
+                    $propertyImage = new PropertyImages();
+                    $propertyImage->property_id = $property->id; // use $property available from the previous step
+
+                    $fileName = time().'_'.$file->getClientOriginalName();
+                    $filePath = $file->move(public_path('assets/uploads/properties/'),$fileName);
+
+                    // Store the file in a desired location and set the image_url column accordingly
+                    $propertyImage->image = $fileName; 
+                    $propertyImage->save();
+                }
+                // $filename = $file->getClientOriginalName();
+                // $uploadedFiles[] = $filename;
             }
         }
 
-        // You can also handle other form data if needed
-        $title = $req->input('title');
-        $status = $req->input('status');
+        return response()->json(['status' => 'success', 'message' => 'Successfully uploaded property']);
 
-        // Return JSON response with file names
-        return response()->json([
-            'uploaded_files' => $uploadedFiles,
-            'title' => $title,
-            'status' => $status,
-        ]);
-        
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Property $property)
+    public function show()
     {
         //
+        $properties = Property::where([['status', '!=', 'deleted']])->get();
+        
+        return view("view-property", compact('properties'));
     }
 
     /**

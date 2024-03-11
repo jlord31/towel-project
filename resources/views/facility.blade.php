@@ -331,6 +331,7 @@
                     },
                     error: function(xhr, status, error) {
                         toastr.error(error);
+                        console.log(xhr);
                     }
                 });
             });

@@ -5,6 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+use App\Models\Property;
+
 class Country extends Model
 {
     use HasFactory;
@@ -15,5 +17,10 @@ class Country extends Model
         'img',
         'status'
     ];
+
+    public function property() 
+    {
+        return $this->belongsTo(Property::class);
+    }
 
 }

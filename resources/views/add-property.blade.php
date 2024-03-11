@@ -105,9 +105,9 @@
                             </div>
                             <div class="form-group">
                                 <label for="inputName">Select Property Features</label>
-                                <select class="select2" id="type" name="type" multiple="multiple" data-placeholder="Select property features" style="width: 100%;">
+                                <select class="select2" id="facility" name="facility[]" multiple="multiple" data-placeholder="Select property features" style="width: 100%;">
                                     @foreach ($facilities as $data)
-                                        <option value="{{$data->id}}">{{$data->title}}</option>
+                                        <option value="{{$data->title}}">{{$data->title}}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -309,6 +309,13 @@
             $('#submit-btn').click(function (e) {
                 e.preventDefault();
 
+                $('.select2').each(function() {
+                    const selectedValues = $(this).find('option:selected').map(function() {
+                        return $(this).val();
+                    }).get();
+                    console.log('Selected values:', selectedValues);
+                });
+
                 // Create FormData object
                 var formData = new FormData($('#property-form')[0]);
 
@@ -331,12 +338,14 @@
                     contentType: false,
                     cache: false,
                     processData:false,
-                    success: function (response) {
+                    success: function (response) 
+                    {
                         // Handle success response
-                        console.log(response);
+                        toastr.success(response.message);
                     },
                     error: function (xhr, status, error) {
                         // Handle error response
+                        toastr.error(error);
                         console.log(xhr);
                         console.log(status);
                         console.log(error);
