@@ -20,13 +20,20 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1>Add Property</h1>
+                    <h1>Edit Property</h1>
                 </div>
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
-                        <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Dashboard</a>
+                        <li class="breadcrumb-item">
+                            <a href="{{ route('dashboard') }}">Dashboard</a> 
                         </li>
-                        <li class="breadcrumb-item active">Properties</li>
+                        <li class="breadcrumb-item">
+                            <a href="{{ route('view-property') }}">Property List</a> 
+                        </li>
+                        <li class="breadcrumb-item">
+                            <a href="{{ route('property-details', ['id' => $property->id]) }}">Property Details</a> 
+                        </li>
+                        <li class="breadcrumb-item active"> Property Details </li>
                     </ol>
                 </div>
             </div>
@@ -39,7 +46,7 @@
             <div class="col-md-12">
                 <div class="card card-primary">
                     <div class="card-header">
-                        <h3 class="card-title">Add Properties</h3>
+                        <h3 class="card-title">Edit Properties</h3>
 
                         <div class="card-tools">
                             <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
@@ -55,14 +62,14 @@
                             <div class="form-group">
                                 <label for="inputName">Title</label>
                                 <input type="text" id="title" name="title" class="form-control" required
-                                    placeholder="Enter title here" />
+                                    placeholder="Enter title here" value="{{$property->title}}" />
                             </div>
                             <div class="form-group">
                                 <label for="inputName">Property type</label>
                                 <select id="type" name="type" class="form-control custom-select">
                                     <option selected disabled>Select one</option>
                                     @foreach ($categories as $data)
-                                        <option value="{{$data->id}}">{{$data->title}}</option>
+                                        <option value="{{$data->id}}"@if($data->id == $property->category_id) selected @endif> {{$data->title}} </option>
                                     @endforeach
                                 </select>
                             </div>
@@ -71,72 +78,83 @@
                                 <select id="country" name="country" class="form-control custom-select">
                                     <option selected disabled>Select one</option>
                                     @foreach ($countries as $country)
-                                        <option value="{{$country->id}}">{{$country->name}}</option>
+                                        <option value="{{$country->id}}" @if($country->id == $property->country_id) selected @endif> {{$country->name}} </option>
                                     @endforeach
                                 </select>
                             </div>
                             <div class="form-group">
                                 <label for="inputName">City</label>
-                                <input type="text" id="city" name="city" class="form-control" required placeholder="Enter city here e.g Abuja, Lagos etc." />
+                                <input type="text" id="city" name="city" class="form-control" required 
+                                    placeholder="Enter city here e.g Abuja, Lagos etc." value="{{$property->city}}"/>
                             </div>
                             <div class="form-group">
                                 <label for="inputName">Address</label>
-                                <input type="text" id="address" name="address" class="form-control" required placeholder="Enter property full address here" />
+                                <input type="text" id="address" name="address" class="form-control" required 
+                                    placeholder="Enter property full address here" value="{{$property->address}}"/>
                             </div>
                             <div class="form-group">
                                 <label for="inputName">Total Persons Allowed</label>
-                                <input type="number" id="people_limit" name="people_limit" class="form-control" required />
+                                <input type="number" id="people_limit" name="people_limit" class="form-control" required 
+                                    value="{{$property->people_limit}}"/>
                             </div>
                             <div class="form-group">
                                 <label for="inputName">Price per night - customer</label>
-                                <input type="number" id="customer_price" name="customer_price" class="form-control" required />
+                                <input type="number" id="customer_price" name="customer_price" class="form-control" required 
+                                value="{{$property->customer_price}}" />
                             </div>
                             <div class="form-group">
                                 <label for="inputName">Price per night - actual/company price</label>
-                                <input type="number" id="actual_price" name="actual_price" class="form-control" required />
+                                <input type="number" id="actual_price" name="actual_price" class="form-control" required 
+                                    value="{{$property->actual_price}}" />
                             </div>
                             <div class="form-group">
                                 <label for="inputName">Number of bedroom</label>
-                                <input type="number" id="beds" name="beds" class="form-control" required />
+                                <input type="number" id="beds" name="beds" class="form-control" required 
+                                    value="{{$property->beds}}" />
                             </div>
                             <div class="form-group">
                                 <label for="inputName">Number of bathroom</label>
-                                <input type="number" id="bathroom" name="bathroom" class="form-control" required />
+                                <input type="number" id="bathroom" name="bathroom" class="form-control" required 
+                                    value="{{$property->bathroom}}" />
                             </div>
                             <div class="form-group">
                                 <label for="inputName">Select Property Features</label>
                                 <select class="select2" required id="facility" name="facility[]" multiple="multiple" data-placeholder="Select property features" style="width: 100%;">
+                                   <!-- Explode the comma-separated string of selected features into an array -->
+                                    
                                     @foreach ($facilities as $data)
-                                        <option value="{{$data->title}}">{{$data->title}}</option>
+                                        @php
+                                            
+                                            $selectedFeatures = explode(',', $property->facility);
+                                        
+                                        @endphp
+                                        <option value="{{$data->title}}" @if(in_array($data->title, $selectedFeatures)) selected="selected" @endif> {{$data->title}} </option>
                                     @endforeach
                                 </select>
                             </div>
                             <div class="form-group">
                                 <label for="inputName">Property Longtitude</label>
-                                <input type="text" id="longtitude" name="longtitude" class="form-control" required />
+                                <input type="text" id="longtitude" name="longtitude" class="form-control" required 
+                                value="{{$property->longtitude}}" />
                             </div>
                             <div class="form-group">
                                 <label for="inputName">Property Latitude</label>
-                                <input type="text" id="latitude" name="latitude" class="form-control" required />
+                                <input type="text" id="latitude" name="latitude" class="form-control" required 
+                                    value="{{$property->latitude}}" />
                             </div>
                             <div class="form-group">
                                 <label for="inputDescription">Property Description</label>
-                                <input type="text" id="description" name="description" class="form-control" required />
+                                <textarea type="text" id="description" name="description" class="form-control" col="4" required >{{$property->description}} </textarea>
                             </div>
                             <div class="form-group">
                                 <label for="inputStatus">Status</label>
                                 <select id="status" name="status" class="form-control custom-select">
                                     <option selected disabled>Select one</option>
-                                    <option>active</option>
-                                    <option>inactive</option>
+                                    <option value="active" @if($property->status == 'active') selected @endif>active</option>
+                                    <option value="inactive" @if($property->status == 'inactive') selected @endif>inactive</option>
                                 </select>
                             </div>
 
-                            
-                            
-                            <!-- <div class="form-group"> 
-                              <input type="file" name="files[]" multiple>
-                            </div> -->
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="card card-default">

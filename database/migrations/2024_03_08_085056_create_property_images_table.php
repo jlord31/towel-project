@@ -16,6 +16,7 @@ return new class extends Migration
             $table->integer('property_id');
             $table->string('image');
             $table->timestamps();
+            $table->foreign('property_id')->references('id')->on('properties')->onDelete('cascade');
         });
     }
 

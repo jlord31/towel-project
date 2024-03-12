@@ -100,6 +100,11 @@ Route::group(['middleware' => 'auth:admin', 'prefix' => 'admin'], function(){
     Route::get('/add-property',[PropertyController::class,'index'])->name('add-property');
     Route::post('/property/upload-property',[PropertyController::class,'store'])->name('upload-property');
     Route::get('/view-property',[PropertyController::class,'show'])->name('view-property');
+    Route::post('/property/fetch/{id}',[PropertyController::class,'fetchPropertyImages'])->name('fetch-property-images');
+    Route::get('property/property-details/{id}',[PropertyController::class,'propertyDetails'])->name('property-details');
+    Route::delete('/delete-property/{id}', [PropertyController::class,'destroy'])->name('delete-property');
+    Route::get('property/edit-property/{id}',[PropertyController::class,'edit'])->name('edit-property');
+    
     //Route::view('/property','property')->name('property');
     
 
