@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 use App\Models\Facility;
 use App\Models\Category;
 use App\Models\Country;
+use App\Models\PropertyImages;
 
 class Property extends Model
 {
@@ -16,7 +17,7 @@ class Property extends Model
     protected $fillable = [
         'country_id',
         'title',
-        'type',
+        'category_id',
         'address',
         'capacity',
         'facility',
@@ -42,11 +43,16 @@ class Property extends Model
 
     public function category() 
     {
-        return $this->hasMany(Category::class);
+        return $this->belongsTo(Category::class);
     }
 
     public function country() 
     {
-        return $this->hasMany(Country::class);
+        return $this->belongsTo(Country::class);
+    }
+
+    public function propertyImages() 
+    {
+        return $this->belongsTo(PropertyImages::class);
     }
 }

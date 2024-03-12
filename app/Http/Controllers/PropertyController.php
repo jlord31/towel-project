@@ -86,7 +86,7 @@ class PropertyController extends Controller
                     $property->title = $req->input('title');
                     $property->description = $req->input('description');
                     $property->status = $req->input('status');
-                    $property->type = $req->input('type');
+                    $property->category_id = $req->input('type');
                     $property->country_id = $req->input('country');
                     $property->city = $req->input('city');
                     $property->address = $req->input('address');
@@ -137,12 +137,43 @@ class PropertyController extends Controller
         return view("view-property", compact('properties'));
     }
 
+     /**
+     * Fetch all images related to the specified property.
+     */
+    function fetchPropertyImages($id) 
+    {
+        $property = Property::findOrFail($id);
+
+        $propertyImages = PropertyImages::where([['property_id', '=', $property->id]])->get();
+
+        return response()->json(['status' => 'success', 'data' => $propertyImages]); 
+    }
+
+    function propertyDetails($id) 
+    {
+        $property = Property::findOrFail($id);
+
+        $propertyImages = PropertyImages::where([['property_id', '=', $property->id]])->get();
+
+        return view("property-details", compact('property','propertyImages'));
+    }
+
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Property $property)
+    public function edit($id)
     {
-        //
+        $categories = Category::where([['status', '=', 'active']])->get();
+
+        $countries = Country::where([['status', '=', 'active']])->get();
+
+        $facilities = Facility::where([['status', '=', 'active']])->get();
+
+        $property = Property::findOrFail($id);
+
+        $propertyImages = PropertyImages::where([['property_id', '=', $property->id]])->get();
+
+        return view("edit-property", compact('property','propertyImages', 'categories', 'countries', 'facilities'));
     }
 
     /**
@@ -156,8 +187,52 @@ class PropertyController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Property $property)
+    public function destroy($id)
     {
-        //
+        // Retrieve the property model based on the submitted ID
+        $property = Property::findOrFail($id);
+
+        // Get the image path for the image in property table
+        $oldImagePath = public_path('assets/uploads/properties/' . $property->image);
+
+        // Delete the image path for the image in property table
+        if (File::exists($oldImagePath)) {
+            File::delete($oldImagePath);
+        }
+
+        // Retrieve associated images
+        $propertyImages = PropertyImages::where([['property_id', '=', $property->id]])->get();
+
+        // Delete associated images from storage
+        foreach ($propertyImages as $image) {
+
+            $propertyImagePath = public_path('assets/uploads/properties/' . $image->image);
+
+            // Delete image file from storage
+            if (File::exists($propertyImagePath)) 
+            {
+                File::delete($propertyImagePath);
+            }
+
+            // delete associated images of the property from the database
+            $image->delete();
+        }
+
+        
+
+        // Delete the property from the database
+        $del = $property->delete();
+
+        if ($del) 
+        {
+            // Return a success message
+            return response()->json(['message' => 'Property deleted successfully']);
+        } 
+        else 
+        {
+            // Return an error message
+            return response()->json(['message' => 'Error occurred when trying to delete Property']);
+        }
+        
     }
 }
