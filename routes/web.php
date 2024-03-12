@@ -17,7 +17,7 @@ use App\Http\Controllers\PropertyController;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    Route::view('/admin','login');
 });
 
 Route::view('/admin','login');
