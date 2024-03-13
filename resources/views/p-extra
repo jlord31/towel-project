@@ -208,11 +208,11 @@
             })
 
             // Function to add queued files to the form data
-            // function addQueuedFilesToFormData(formData) {
-            //     myDropzone.files.forEach(function (file, index) {
-            //         formData.append('files[' + index + ']', file);
-            //     });
-            // }
+            function addQueuedFilesToFormData(formData) {
+                myDropzone.files.forEach(function (file, index) {
+                    formData.append('files[' + index + ']', file);
+                });
+            }
 
             myDropzone.on("addedfile", function (file) {
                 // Hookup the start button
@@ -300,3 +300,38 @@
 @endpush
 
 
+Property Name/Title: Zeus - Beautiful 2 Bedroom
+Country: Nigeria
+City: Jahi, Abuja
+Address: No 44 Avenue, Jahi, Abuja
+Bedroom: 2
+Bathroom: 3
+Number of guest allowed: 3
+Property Category: Two Bedrooms
+Property Latitude: 9.1037
+Property Longtitude: 7.4406
+Price Display to Customers: 94500
+Actual Price: 80000
+Profit for Company: 14500
+Property Description: A serene 2 bedroom apartment at Jahi, Abuja
+Status: active
+
+Wi-Fi, Private Pool, NETFLIX, House Keeping, Laundry On Demand, Parking Space, Gym, Washing Machine, Partial Smart House
+
+Wi-Fi, Gym, NETFLIX
+
+ <!-- Explode the comma-separated string of selected features into an array -->
+                                    
+ @foreach ($facilities as $data)
+ 
+ <option value="{{$data->title}}" @if(in_array($data->title, $selectedFeatures)) selected="selected" @endif> {{$data->title}} </option>
+@endforeach
+
+var imagePath = "{{ asset('assets/uploads/properties') }}" + "/" + image.image; // Construct image path
+
+                        console.log(imagePath);
+                
+                        var mockFile = { name: image.image }; // Create a mock file object
+                        myDropzone.emit("addedfile", mockFile); // Add the file to Dropzone
+                        myDropzone.emit("thumbnail", mockFile, imagePath); // Set the thumbnail for the file
+                        myDropzone.emit("complete", mockFile); // Mark the file as complete

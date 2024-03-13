@@ -9,6 +9,7 @@ use App\Models\Facility;
 use App\Models\Category;
 use App\Models\Country;
 use App\Models\PropertyImages;
+use App\Models\PropertyUnavailableDate;
 
 class Property extends Model
 {
@@ -54,5 +55,10 @@ class Property extends Model
     public function propertyImages() 
     {
         return $this->belongsTo(PropertyImages::class);
+    }
+
+    public function propertyUnavailableDate() 
+    {
+        return $this->hasMany(PropertyUnavailableDate::class);
     }
 }

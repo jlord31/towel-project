@@ -1,13 +1,14 @@
 @extends('layout.master')
 
 @push('plugin-styles')
-    <!-- {!! Html::style('/assets/plugins/plugin.css') !!} -->
-
     <!-- dropzonejs -->
     {!! Html::style('assets/plugins/dropzone/min/dropzone.min.css') !!}
 
     <!-- Select2 -->
     {!! Html::style('assets/plugins/select2/css/select2.min.css') !!}
+
+    <!-- summernote -->
+    {!! Html::style('assets/plugins/summernote/summernote-bs4.min.css') !!}
 @endpush
 
 
@@ -121,7 +122,9 @@
                             </div>
                             <div class="form-group">
                                 <label for="inputDescription">Property Description</label>
-                                <input type="text" id="description" name="description" class="form-control" required />
+                                <textarea required id="description" name="description" class="form-control">
+                                    
+                                </textarea>
                             </div>
                             <div class="form-group">
                                 <label for="inputStatus">Status</label>
@@ -234,6 +237,8 @@
 @push('plugin-scripts')
     {!! Html::script('assets/plugins/dropzone/min/dropzone.min.js') !!}
     {!! Html::script('assets/plugins/select2/js/select2.full.min.js') !!}
+    <!-- Summernote -->
+    {!! Html::script('assets/plugins/summernote/summernote-bs4.min.js') !!}
 @endpush
 @push('custom-scripts')
     <!-- DataTables  & Plugins -->
@@ -241,6 +246,9 @@
         $(document).ready(function () {
             //Initialize Select2 Elements
             $('.select2').select2();
+
+            // initialize Summernote
+            $('#description').summernote();
 
             $(function () {
                 $("#payment-table").DataTable({
