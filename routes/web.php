@@ -16,9 +16,14 @@ use App\Http\Controllers\PropertyController;
 |
 */
 
+// Route::get('/', function () {
+//     return view('welcome');
+// });
+
 Route::get('/', function () {
     return redirect('/admin/login'); 
 });
+
 
 Route::view('/admin','login');
 Route::view('/admin/login','login');
@@ -101,11 +106,22 @@ Route::group(['middleware' => 'auth:admin', 'prefix' => 'admin'], function(){
     Route::post('/property/upload-property',[PropertyController::class,'store'])->name('upload-property');
     Route::get('/view-property',[PropertyController::class,'show'])->name('view-property');
     Route::post('/property/fetch/{id}',[PropertyController::class,'fetchPropertyImages'])->name('fetch-property-images');
-    Route::get('property/property-details/{id}',[PropertyController::class,'propertyDetails'])->name('property-details');
+    Route::get('/property/property-details/{id}',[PropertyController::class,'propertyDetails'])->name('property-details');
     Route::delete('/delete-property/{id}', [PropertyController::class,'destroy'])->name('delete-property');
-    Route::get('property/edit-property/{id}',[PropertyController::class,'edit'])->name('edit-property');
+    Route::get('/property/edit-property/{id}',[PropertyController::class,'edit'])->name('edit-property');
+
+    Route::get('fetch-all-facilities',[PropertyController::class,'fetchAllFacilities'])->name('fetch-all-facilities');
+    //Route::get('fetch-uploaded-images',[PropertyController::class,'fetchAssociatedImages'])->name('fetch-uploaded-images');
+    
+    
     
     //Route::view('/property','property')->name('property');
+
+    Route::get('/property/unavaliable-dates',[PropertyController::class,'propertyUnavailableDateView'])->name('unavaliable-dates');
+    Route::post('/property/save-unavaliable-dates',[PropertyController::class,'storePropertyUnavailableDate'])->name('save-unavaliable-dates');
+    Route::post('/property/update-property-unavaliability-status/{id}',[PropertyController::class,'updatePropertyUavaliabilityStatus'])->name('update-property-unavaliability-status');
+    Route::delete('/delete-unavaliable-date/{id}', [PropertyController::class,'deleteUnavaliableDate'])->name('delete-unavaliable-date');
+    
     
 
     // admin settings route

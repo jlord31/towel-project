@@ -8,8 +8,15 @@
 
     <!-- Select2 -->
     {!! Html::style('assets/plugins/select2/css/select2.min.css') !!}
-@endpush
 
+    <!-- summernote -->
+    {!! Html::style('assets/plugins/summernote/summernote-bs4.min.css') !!}
+@endpush
+@php
+     
+    $selectedFeatures = explode(',', $property->facility);
+ 
+ @endphp
 
 @section('content')
 @section('content')
@@ -120,16 +127,7 @@
                             <div class="form-group">
                                 <label for="inputName">Select Property Features</label>
                                 <select class="select2" required id="facility" name="facility[]" multiple="multiple" data-placeholder="Select property features" style="width: 100%;">
-                                   <!-- Explode the comma-separated string of selected features into an array -->
-                                    
-                                    @foreach ($facilities as $data)
-                                        @php
-                                            
-                                            $selectedFeatures = explode(',', $property->facility);
-                                        
-                                        @endphp
-                                        <option value="{{$data->title}}" @if(in_array($data->title, $selectedFeatures)) selected="selected" @endif> {{$data->title}} </option>
-                                    @endforeach
+                                  
                                 </select>
                             </div>
                             <div class="form-group">
@@ -144,7 +142,9 @@
                             </div>
                             <div class="form-group">
                                 <label for="inputDescription">Property Description</label>
-                                <textarea type="text" id="description" name="description" class="form-control" col="4" required >{{$property->description}} </textarea>
+                                <textarea required id="description" name="description" class="form-control">
+                                    {{$property->description}}
+                                </textarea>
                             </div>
                             <div class="form-group">
                                 <label for="inputStatus">Status</label>
@@ -252,13 +252,16 @@
 @push('plugin-scripts')
     {!! Html::script('assets/plugins/dropzone/min/dropzone.min.js') !!}
     {!! Html::script('assets/plugins/select2/js/select2.full.min.js') !!}
+    <!-- Summernote -->
+    {!! Html::script('assets/plugins/summernote/summernote-bs4.min.js') !!}
 @endpush
 @push('custom-scripts')
     <!-- DataTables  & Plugins -->
     <script>
         $(document).ready(function () {
-            //Initialize Select2 Elements
-            $('.select2').select2();
+            
+            // initialize Summernote
+            $('#description').summernote()
 
             $(function () {
                 $("#payment-table").DataTable({
@@ -268,6 +271,38 @@
                     "buttons": ["excel", "pdf", "print", "colvis"]
                 }).buttons().container().appendTo('#payment-table_wrapper .col-md-6:eq(0)');
             });
+
+            // Fetch data from server using AJAX
+            $.ajax({
+                url: '{{route("fetch-all-facilities")}}',
+                method: 'GET',
+                dataType: 'json',
+                success: function(response) {
+
+                    // Clear previous options
+                    $('#facility').empty();  
+
+                    // Populate select box with fetched data and select currently selected options
+                    var selectedFeatures = {!! json_encode($selectedFeatures) !!};
+                    $.each(response.data, function(index, facility) {
+                        $('#facility').append('<option value="' + facility.title + '">' + facility.title + '</option>');
+                        if ($.inArray(facility.title, selectedFeatures) !== -1) {
+                            $('#facility').find('option[value="' + facility.title + '"]').prop('selected', true);
+                        }
+                    });
+                    $('#facility').trigger('change');
+                },
+                error: function(xhr, status, error) {
+                    toastr.error('Failed to fetch data:', error);
+                }
+            });
+
+            //Initialize Select2 Elements
+            $('.select2').select2();
+
+
+
+            
 
 
 
@@ -290,6 +325,40 @@
                 autoQueue: false, // Make sure the files aren't queued until manually added
                 previewsContainer: "#previews", // Define the container to display the previews
                 clickable: ".fileinput-button" // Define the element that should be used as click trigger to select files.
+            });
+
+            // Fetch uploaded images for the property
+            $.ajax({
+                url: "{{ route('fetch-property-images', ['id' => $property->id]) }}", // Replace with your endpoint URL to fetch uploaded images
+                method: 'POST',
+                data: {
+                    _token: '{{ csrf_token() }}'
+                },
+                dataType: 'json',
+                success: function (response) {
+                    // Iterate over fetched images and display them in Dropzone previews
+
+                    console.log(response);
+                    $.each(response.data, function(index, image) {
+
+                        // Clone the template node to create a new preview
+                        var previewNodeClone = previewNode.cloneNode(true);
+
+                        // Set the image path for the preview
+                        var imagePath = "{{ asset('assets/uploads/properties') }}" + "/" + image.image; // Construct image path
+                        previewNodeClone.querySelector("[data-dz-thumbnail]").setAttribute("src", imagePath);
+               
+
+                        // Populate the preview with the image name
+                        previewNodeClone.querySelector("[data-dz-name]").textContent = image.image;
+                        // Append the preview to the Dropzone previews container
+                        document.querySelector("#previews").appendChild(previewNodeClone);
+
+                    });
+                },
+                error: function (xhr, status, error) {
+                    console.error('Failed to fetch uploaded images:', error);
+                }
             });
 
             // Function to add queued files to the form data

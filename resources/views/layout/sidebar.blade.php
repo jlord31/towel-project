@@ -78,7 +78,7 @@
           </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-              <a href="{{ route('add-property') }}" class="nav-link {{ active_class(['*add-property*']) }}">
+                <a href="{{ route('add-property') }}" class="nav-link {{ active_class(['*add-property*']) }}">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Add Property</p>
                 </a>
@@ -89,14 +89,15 @@
                   <p>View Properties</p>
                 </a>
               </li>
+              <li class="nav-item">
+                <a href="{{ route('unavaliable-dates') }}" class="nav-link {{ active_class(['*unavaliable-dates*']) }}">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Property Unavaliable Date</p>
+                </a>
+              </li>
             </ul>
         </li>
-        <li class="nav-item">
-          <a href="{{ route('dashboard') }}" class="nav-link {{ active_class(['*dashboard*']) }}">
-            <i class="fas fa-images nav-icon"></i>
-            <p>Unavaliable Date</p>
-          </a>
-        </li>
+        
         <li class="nav-item">
           <a href="{{ route('booking') }}" class="nav-link {{ active_class(['*booking*']) }}">
             <i class="fas fa-calendar-check nav-icon"></i>

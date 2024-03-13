@@ -21,6 +21,7 @@ use App\Models\Report;
 use App\Models\Facility;
 use App\Models\Property;
 use App\Models\PropertyImages;
+use App\Models\PropertyUnavailableDate;
 
 class PropertyController extends Controller
 {
@@ -176,6 +177,13 @@ class PropertyController extends Controller
         return view("edit-property", compact('property','propertyImages', 'categories', 'countries', 'facilities'));
     }
 
+    function fetchAllFacilities() 
+    {
+        $facilities = Facility::where([['status', '!=', 'deleted']])->get();
+
+        return response()->json(['status' => 'success', 'data' => $facilities]); 
+    }
+
     /**
      * Update the specified resource in storage.
      */
@@ -234,5 +242,79 @@ class PropertyController extends Controller
             return response()->json(['message' => 'Error occurred when trying to delete Property']);
         }
         
+    }
+
+    /**
+     * return the property unavliable date view.
+     */
+    function propertyUnavailableDateView() 
+    {
+        $property = Property::where([['status', '!=', 'deleted']])->get();
+
+        $unavaliable = PropertyUnavailableDate::where([['status', '!=', 'deleted']])->get();
+
+        return view("unavaliable-dates", compact('property','unavaliable'));
+    }
+
+    function storePropertyUnavailableDate(Request $req)  
+    {
+        // Split the date-time range into start and end date-time values
+        [$startDateTime, $endDateTime] = explode(' - ', $req->input('reservationtime'));
+
+        // Convert date-time strings to Carbon instances for easier handling
+        $startDateTime = \Carbon\Carbon::parse($startDateTime);
+        $endDateTime = \Carbon\Carbon::parse($endDateTime);
+
+        $unavaliable = new PropertyUnavailableDate();
+        $unavaliable->property_id = $req->input('property_id');
+        $unavaliable->status = $req->input('status');
+        $unavaliable->from = $startDateTime;
+        $unavaliable->to = $endDateTime;
+
+        // Save the unavaliable model
+        $save = $unavaliable->save();
+
+        if ($save) 
+        {
+            Session::flash('success', 'successfully added property unavaliable date');
+            return back();
+        } 
+        else 
+        {
+            Session::flash('error', 'Error occurred when tring to add property unavaliable date');
+            return back();
+        }
+    
+    }
+
+    function updatePropertyUavaliabilityStatus($id) 
+    {
+        $item = Property::findOrFail($id);
+        
+        // // Get the current status from the database
+        $currentStatus = Property::where('id', $item->id)->value('status');
+
+        // // Update the status based on its current value
+        if ($currentStatus == 'active') 
+        {
+            Property::where('id', $item->id)->update(['status' => 'inactive']);
+            $newStatus = 'inactive';
+        } 
+        else 
+        {
+            Property::where('id', $item->id)->update(['status' => 'active']);
+            $newStatus = 'active';
+        }
+
+        // Return a JSON response indicating success or failure
+        return response()->json(['status' => 'success', 'new_status' => $newStatus]);
+    }
+
+    function deleteUnavaliableDate($id) 
+    {
+        $item = PropertyUnavailableDate::findOrFail($id);
+        $item->update(['status' => 'deleted']);
+
+        return response()->json(['message' => 'Successfully deleted property unavaliable date']);
     }
 }

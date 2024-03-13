@@ -108,7 +108,7 @@
 
                 <div class="col mb-3">
                     <strong class="fs-8 mr-2">Property Description:</strong>
-                    {{$property->description}}
+                    {!!$property->description!!}
                 </div>
 
                 <div class="col mb-3">
