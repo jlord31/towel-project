@@ -37,3 +37,10 @@ Route::group(['middleware' => 'auth:api', 'prefix' => 'v1/user'], function(){
     Route::post('report',[UserController::class,'userReport']);
     
 });
+
+
+Route::group(['prefix' => 'v1/property'], function(){
+
+    Route::get('/',[MainController::class,'property']);
+    
+});

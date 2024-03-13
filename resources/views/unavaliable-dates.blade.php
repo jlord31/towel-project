@@ -36,7 +36,7 @@
             <div class="col-md-12">
                 <div class="card card-primary">
                     <div class="card-header">
-                        <h3 class="card-title">Add Category</h3>
+                        <h3 class="card-title">Unavaliable Dates</h3>
 
                         <div class="card-tools">
                             <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
@@ -103,7 +103,7 @@
 
                     <div class="card">
                         <div class="card-header">
-                            <h3 class="card-title">Country List</h3>
+                            <h3 class="card-title">Property Unavaliable Date List</h3>
                         </div>
                         <!-- /.card-header -->
                         <div class="card-body">
