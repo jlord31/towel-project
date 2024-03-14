@@ -28,19 +28,33 @@ Route::group(['prefix' => 'v1/user/auth'], function(){
 });
 
 // protected routes
-Route::group(['middleware' => 'auth:api', 'prefix' => 'v1/user'], function(){
 
-    Route::get('profile',[UserController::class,'profile']);
-    Route::get('logout',[UserController::class,'logout']);
-    Route::post('update-user',[UserController::class,'updateProfile']);
-    Route::post('change-password',[UserController::class,'changePassword']);
-    Route::post('report',[UserController::class,'userReport']);
+Route::group(['middleware' => 'auth:api', 'prefix' => 'v1'], function()
+{
+    // protected user group route
+    Route::group(['prefix' => '/user'], function()
+    {
+
+        Route::get('profile',[UserController::class,'profile']);
+        Route::get('logout',[UserController::class,'logout']);
+        Route::post('update-user',[UserController::class,'updateProfile']);
+        Route::post('change-password',[UserController::class,'changePassword']);
+        Route::post('report',[UserController::class,'userReport']);
+        
+    });
+
+    //protected property route
+    Route::group(['middleware' => 'auth:api', 'prefix' => '/property'], function()
+    {
+
+        Route::get('/',[MainController::class,'property']);
+    
+        Route::get('category',[MainController::class,'getCategory']);
+
+        Route::post('add-booking',[UserController::class,'addBooking']);
+    });
+
+    Route::get('get-available-payment-method',[MainController::class,'getPaymentMethod']);
     
 });
 
-
-Route::group(['prefix' => 'v1/property'], function(){
-
-    Route::get('/',[MainController::class,'property']);
-    
-});
