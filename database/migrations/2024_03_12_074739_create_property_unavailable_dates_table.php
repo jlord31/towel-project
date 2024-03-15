@@ -14,8 +14,8 @@ return new class extends Migration
         Schema::create('property_unavailable_dates', function (Blueprint $table) {
             $table->id();
             $table->integer('property_id');
-            $table->datetime('from');
-            $table->datetime('to');
+            $table->date('from');
+            $table->date('to');
             $table->enum('status', ['active', 'inactive', 'deleted']);
             $table->timestamps();
         });
