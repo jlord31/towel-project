@@ -19,7 +19,6 @@ class MainController extends Controller
 {
     function property(Request $req) 
     {
-
         // Check if a category parameter is provided
         if ($req->has('category')) 
         {
@@ -46,10 +45,10 @@ class MainController extends Controller
         }
 
         // Retrieve all property images
-        $propertyImages = PropertyImages::all();
+        $propertyImages = PropertyImages::select('id', 'property_id', 'image')->get();
 
         // Retrieve property unavailable dates
-        $propertyUnavailableDates = PropertyUnavailableDate::where([['status', '=', 'active']])->get();
+        $propertyUnavailableDates = PropertyUnavailableDate::select('id', 'property_id', 'from', 'to')->where([['status', '=', 'active']])->get();
 
         // Prepare the data for the response
         $propertyData = [];
@@ -57,8 +56,17 @@ class MainController extends Controller
         {
             $propertyDetails = $property->toArray();
 
+            // Find the image path for the property
+            $propertyImagePath = asset('assets/uploads/properties/' . $property->image);
+            $propertyDetails['image'] = $propertyImagePath;
+
             // Find property images associated with the current property
             $images = $propertyImages->where('property_id', $property->id)->toArray();
+
+            // Append full image URLs to the image data
+            foreach ($images as &$image) {
+                $image['image'] = asset('assets/uploads/properties/' . $image['image']);
+            }
 
             // Find unavailable dates associated with the current property
             $unavailableDates = $propertyUnavailableDates->where('property_id', $property->id)->toArray();
@@ -83,11 +91,25 @@ class MainController extends Controller
 
     function getCategory() 
     {
-        $category = Category::where([['status', '=', 'active']])->get();
+        $categories = Category::where([['status', '=', 'active']])->get();
+
+        // Prepare the data for the response
+        $categoryData = [];
+        foreach ($categories as $cat) 
+        {
+            $categoryDetails = $cat->toArray();
+
+            // Find the image path for the category
+            $categoryImagePath = asset('assets/uploads/category/' . $cat->image);
+            $categoryDetails['img'] = $categoryImagePath;
+
+            // Add the category details to the category data array
+            $categoryData[] = $categoryDetails;
+        }
 
         return response()->json([
             'message' => 'All categories', 
-            'category' => $category 
+            'category' => $categoryData 
         ], 200);
     }
 
@@ -188,3 +210,4 @@ class MainController extends Controller
 
     }
 }
+
