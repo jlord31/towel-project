@@ -8,10 +8,15 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 
 use Illuminate\Validation\ValidationException;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 use App\Models\User;
 use App\Models\Report;
+use App\Models\Property;
+use App\Models\PropertyImages;
+use App\Models\PropertyUnavailableDate;
+use App\Models\WishList;
 
 class UserController extends Controller
 {
@@ -281,6 +286,149 @@ class UserController extends Controller
                 'errors' => $errors // List of individual errors
             ], 422);
         }
+    }
+
+    function addWishList(Request $req) 
+    {
+        try 
+        {
+            $data = $req->validate([
+                'user_id'=>'required',
+                'property_id'=>'required'
+            ]);
+
+            $exsists = WishList::where([["user_id", "=", $req->user_id], ["property_id", "=", $req->property_id]])->first();
+
+            if (!$exsists) 
+            {
+                $add_new_wishList = WishList::create($data);
+
+                if ($add_new_wishList) 
+                {
+                    return response()->json([
+                        'message' => 'Sucessfully added new wishList'
+                    ], 200);
+                } 
+                else 
+                {
+                    return response()->json([
+                        'message' => 'Error occurred when trying to add new wishList'
+                    ], 422);
+                }
+            } 
+            else 
+            {
+                return response()->json([
+                    'message' => 'Property WishList already exsists!'
+                ], 409);
+            }
+            
+        } 
+        catch (ValidationException $e) 
+        {
+            // Handle validation errors
+            $errors = $e->errors(); // Get all validation errors as an array
+
+            return response()->json([
+                'message' => 'Validation failed.', // General message first
+                'errors' => $errors // List of individual errors
+            ], 422);
+        }
+    }
+
+    function getWishList() 
+    {
+        $user = Auth::guard('api')->user();
+
+        // Get the user's wish list
+        $userWishList = WishList::where('user_id', $user->id)->pluck('property_id');
+
+        // Retrieve properties based on the user's wish list
+        $properties = Property::whereIn('id', $userWishList)
+        ->where('status', 'active')
+        ->with(['country:id,name', 'category:id,title']) // Eager load only necessary columns
+        ->get();
+
+        // Retrieve all property images
+        $propertyImages = PropertyImages::select('id', 'property_id', 'image')->get();
+
+        // Retrieve property unavailable dates
+        $propertyUnavailableDates = PropertyUnavailableDate::select('id', 'property_id', 'from', 'to')->where([['status', '=', 'active']])->get();
+
+        // Prepare the data for the response
+        $propertyData = [];
+        foreach ($properties as $property) 
+        {
+            $propertyDetails = $property->toArray();
+
+            // Find the image path for the property
+            $propertyImagePath = asset('assets/uploads/properties/' . $property->image);
+            $propertyDetails['image'] = $propertyImagePath;
+
+            // Add country and category names to the property details
+            $propertyDetails['country'] = $property->country->name;
+            $propertyDetails['category'] = $property->category->title;
+
+            // Find property images associated with the current property
+            $images = $propertyImages->where('property_id', $property->id)->toArray();
+
+            // Append full image URLs to the image data
+            foreach ($images as &$image) {
+                $image['image'] = asset('assets/uploads/properties/' . $image['image']);
+            }
+
+            // Find unavailable dates associated with the current property
+            $unavailableDates = $propertyUnavailableDates->where('property_id', $property->id)->toArray();
+
+            // Add property images and unavailable dates to the property details
+            $propertyDetails['property_images'] = $images;
+            $propertyDetails['unavailable_dates'] = $unavailableDates;
+
+            // Add the property details to the property data array
+            $propertyData[] = $propertyDetails;
+        }
+
+        // Prepare API response
+        $response = [
+            'message' => 'User property Wishlist ',
+            'properties' => $propertyData,
+        ];
+
+        // Return API response as JSON
+        return response()->json($response, 200);
+           
+    }
+
+    function deleteWishList($id) 
+    {
+        try 
+        {
+            $wish = WishList::findorFail($id);
+
+            $user = Auth::guard('api')->user();
+
+            $del = $wish->where([['user_id', '=', $user->id]])->delete();
+
+            if ($del) 
+            {
+                return response()->json([
+                    'message' => 'Sucessfully removed property from wishList'
+                ], 200);
+            } 
+            else 
+            {
+                return response()->json([
+                    'message' => 'Error occurred when trying to remove property from wishList'
+                ], 422);
+            }
+        } 
+        catch (ModelNotFoundException $e) 
+        {
+            return response()->json([
+                'message' => 'Failed to find specified wishlist ID' , // General message first
+            ], 422);
+        }
+        
     }
 }
 

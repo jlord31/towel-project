@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 
+use Illuminate\Support\Facades\DB;
 use App\Models\Admin;
 use App\Models\Category;
 use App\Models\Property;
@@ -30,7 +31,10 @@ class MainController extends Controller
             if ($category) 
             {
                 // Retrieve properties filtered by the category ID
-                $properties = Property::where('category_id', $category->id)->get();
+                $properties = Property::where('category_id', $category->id)
+                    ->where('status', 'active')
+                    ->with(['country:id,name', 'category:id,title']) // Eager load only necessary columns
+                    ->get();
             } 
             else 
             {
@@ -41,7 +45,9 @@ class MainController extends Controller
         else 
         {
             // Retrieve all properties
-            $properties = Property::where([['status', '=', 'active']])->get();
+            $properties = Property::where([['status', '=', 'active']])
+                    ->with(['country:id,name', 'category:id,title']) // Eager load only necessary columns
+                    ->get();
         }
 
         // Retrieve all property images
@@ -113,11 +119,6 @@ class MainController extends Controller
         ], 200);
     }
 
-    function addWishLisht(Request $req) 
-    {
-        
-    }
-
     function addPropertyReview(Request $req) 
     {
         
@@ -125,7 +126,7 @@ class MainController extends Controller
 
     function getPaymentMethod() 
     {
-        $payment = PaymentMethod::where([['show_on_mobile', '=', 1]])->get();
+        $payment = PaymentMethod::where([['show_on_mobile', '=', 1],['status', '=', 'active']])->get();
 
         return response()->json([
             'message' => 'Avaliable payment methods', 
@@ -139,10 +140,45 @@ class MainController extends Controller
         {
             $req->validate([
                 'latitude'=>'required',
-                'longtitude'=>'required'
+                'longitude'=>'required',
+                'distance'=>'required'
             ]);
 
-            
+            $latitude = $req->latitude;
+            $longitude = $req->longitude;
+            $distance = $req->distance;
+
+            // Calculate the radius of the Earth in kilometres
+            $earthRadius = 6371;
+
+            // Calculate the angular distance in radians
+            $distanceRadians = $distance / $earthRadius;
+
+            // Convert latitude and longitude from degrees to radians
+            $latitudeRadians = deg2rad($latitude);
+            $longitudeRadians = deg2rad($longitude);
+
+            // Calculate the boundaries of the bounding box
+            $minLatitude = $latitudeRadians - $distanceRadians;
+            $maxLatitude = $latitudeRadians + $distanceRadians;
+
+            $minLongitude = $longitudeRadians - $distanceRadians;
+            $maxLongitude = $longitudeRadians + $distanceRadians;
+
+            // Perform a database query to retrieve nearby properties
+            $nearbyProperties = Property::select(
+                'id', 'title', 'longitude', 'latitude',
+                DB::raw("(6371 * acos(cos(radians($latitude)) * cos(radians(latitude)) * cos(radians(longitude) - radians($longitude)) + sin(radians($latitude)) * sin(radians(latitude)))) AS distance")
+            )
+            ->whereBetween('latitude', [$minLatitude, $maxLatitude])
+            ->whereBetween('longitude', [$minLongitude, $maxLongitude])
+            ->having('distance', '<=', $distance)
+            ->get();
+
+            return response()->json([
+                'message' => 'Avaliable nearby properties', // General message first
+                'properties' => $nearbyProperties // List of individual errors
+            ], 200);
         } 
         catch (ValidationException $e) 
         {
