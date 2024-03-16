@@ -28,7 +28,7 @@ class Property extends Model
         'rate',
         'people_limit',
         'latitude',
-        'longtitude',
+        'longitude',
         'actual_price',
         'customer_price',
         'company_profit',

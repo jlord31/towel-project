@@ -25,7 +25,7 @@ return new class extends Migration
             $table->string('rate')->default(0);
             $table->string('people_limit');
             $table->string('latitude');
-            $table->string('longtitude');
+            $table->string('longitude');
             $table->bigInteger('actual_price');
             $table->bigInteger('customer_price');
             $table->bigInteger('company_profit');

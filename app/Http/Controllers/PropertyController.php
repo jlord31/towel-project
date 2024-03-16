@@ -98,7 +98,7 @@ class PropertyController extends Controller
                     $property->bathroom = $req->input('bathroom');
                     $property->facility = $facility;
                     $property->company_profit = $company_profit;
-                    $property->longtitude = $req->input('longtitude');
+                    $property->longitude = $req->input('longtitude');
                     $property->latitude = $req->input('latitude');
 
                     // Store the file in a desired location and set the image column accordingly

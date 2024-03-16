@@ -40,6 +40,16 @@ Route::group(['middleware' => 'auth:api', 'prefix' => 'v1'], function()
         Route::post('update-user',[UserController::class,'updateProfile']);
         Route::post('change-password',[UserController::class,'changePassword']);
         Route::post('report',[UserController::class,'userReport']);
+
+        //protected wishlist route
+        Route::group(['middleware' => 'auth:api', 'prefix' => '/wishlist'], function()
+        {
+            Route::get('/',[UserController::class,'getWishList']);
+        
+            Route::post('add',[UserController::class,'addWishList']);
+
+            Route::delete('delete/{id}',[UserController::class,'deleteWishList']);
+        });
         
     });
 
@@ -52,6 +62,8 @@ Route::group(['middleware' => 'auth:api', 'prefix' => 'v1'], function()
         Route::get('category',[MainController::class,'getCategory']);
 
         Route::post('add-booking',[UserController::class,'addBooking']);
+
+        Route::get('get-nearby-properties',[MainController::class,'getNearbyProperty']);
     });
 
     Route::get('get-available-payment-method',[MainController::class,'getPaymentMethod']);
