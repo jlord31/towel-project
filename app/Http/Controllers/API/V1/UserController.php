@@ -430,5 +430,15 @@ class UserController extends Controller
         }
         
     }
+
+    function addRide(Request $req) 
+    {
+        
+    }
+
+    function getRide() 
+    {
+        
+    }
 }
 
