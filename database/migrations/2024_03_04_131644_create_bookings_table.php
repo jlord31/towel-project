@@ -28,6 +28,7 @@ return new class extends Migration
             $table->integer('guest_infant')->nullable();
             $table->longText('cancle_reason')->nullable();
             $table->enum('booked_ride', [0,1]);
+            $table->enum('is_enquiry', [0,1]);
             $table->enum('ride_rental_type', ['airport_park_pickup',' picked_rental_dates','full_stay_rental']);
             $table->enum('payment_type', ['pay_with_merchants','pay_with_crypto','pay_with_bank_transfer']);
             $table->enum('status', ['Booked','Check_in','Completed','Cancelled','Confirmed']);

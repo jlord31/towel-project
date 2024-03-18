@@ -50,6 +50,14 @@ Route::group(['middleware' => 'auth:api', 'prefix' => 'v1'], function()
 
             Route::delete('delete/{id}',[UserController::class,'deleteWishList']);
         });
+
+        //protected ride route
+        Route::group(['middleware' => 'auth:api', 'prefix' => '/ride'], function()
+        {
+            Route::get('/',[UserController::class,'getRide']);
+        
+            Route::post('add',[UserController::class,'addRide']);
+        });
         
     });
 
