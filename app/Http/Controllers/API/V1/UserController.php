@@ -433,7 +433,27 @@ class UserController extends Controller
 
     function addRide(Request $req) 
     {
-        
+        try 
+        {
+            $req->validate([
+                
+            ]);
+
+            return response()->json([
+                'message' => 'Sucessfully added new booking'
+            ], 200);
+            
+        } 
+        catch (ValidationException $e) 
+        {
+            // Handle validation errors
+            $errors = $e->errors(); // Get all validation errors as an array
+
+            return response()->json([
+                'message' => 'Validation failed.', // General message first
+                'errors' => $errors // List of individual errors
+            ], 422);
+        }
     }
 
     function getRide() 
