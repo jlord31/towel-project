@@ -440,7 +440,7 @@ class UserController extends Controller
             ]);
 
             return response()->json([
-                'message' => 'Sucessfully added new booking'
+                'message' => 'Sucessfully added new ride'
             ], 200);
             
         } 
