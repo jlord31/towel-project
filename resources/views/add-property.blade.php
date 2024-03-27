@@ -310,8 +310,6 @@
             };
 
             // DropzoneJS Demo Code End
-
-            // Submit button click handler
             
             // Submit form with queued files
             $('#submit-btn').click(function (e) {
@@ -356,8 +354,7 @@
                     },
                     error: function (xhr, status, error) {
                         // Handle error response
-                        toastr.error(error);
-                        console.log(xhr);
+                        toastr.error(error); 
                         console.log(status);
                         console.log(error);
                     }
