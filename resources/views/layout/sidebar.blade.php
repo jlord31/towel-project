@@ -69,6 +69,30 @@
           </a>
         </li>
         <li class="nav-item">
+          <a href="#" class="nav-link {{ active_class(['*ride*']) }}">
+            <i class="nav-icon fas fa-table"></i>
+            <p>
+              Ride
+              <i class="fas fa-angle-left right"></i>
+            </p>
+          </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <a href="{{ route('manage-ride') }}" class="nav-link {{ active_class(['*manage-ride*']) }}">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Manage Ride</p>
+                </a>
+              </li>
+              
+              <li class="nav-item">
+                <a href="{{ route('ride-unavaliable-dates') }}" class="nav-link {{ active_class(['*ride-unavaliable-dates*']) }}">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Ride Unavaliable Date</p>
+                </a>
+              </li>
+            </ul>
+        </li>
+        <li class="nav-item">
           <a href="#" class="nav-link {{ active_class(['*property*']) }}">
             <i class="nav-icon fas fa-table"></i>
             <p>
