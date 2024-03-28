@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\MainController;
 use App\Http\Controllers\PropertyController;
+use App\Http\Controllers\RideController;
 
 
 /*
@@ -122,6 +123,21 @@ Route::group(['middleware' => 'auth:admin', 'prefix' => 'admin'], function(){
     Route::post('/property/update-property-unavaliability-status/{id}',[PropertyController::class,'updatePropertyUavaliabilityStatus'])->name('update-property-unavaliability-status');
     Route::delete('/delete-unavaliable-date/{id}', [PropertyController::class,'deleteUnavaliableDate'])->name('delete-unavaliable-date');
     
+    //protected ride route
+    Route::group([ 'prefix' => '/ride'], function()
+    {
+        Route::get('/',[RideController::class,'getRide'])->name('manage-ride');
+    
+        Route::post('add',[RideController::class,'addRide'])->name('add-ride');
+
+        Route::delete('delete/{id}',[RideController::class,'deleteRide'])->name('delete-ride');
+
+        Route::get('ride-unavaliable-dates',[RideController::class,'rideUnavailableDateView'])->name('ride-unavaliable-dates');
+        Route::post('save-ride-unavaliable-dates',[RideController::class,'storeRideUnavailableDate'])->name('save-ride-unavaliable-dates');
+        Route::post('update-ride-unavaliability-status/{id}',[RideController::class,'updateRideUavaliabilityStatus'])->name('update-ride-unavaliability-status');
+        Route::delete('delete-ride-unavaliable-date/{id}', [RideController::class,'deleteRideUnavaliableDate'])->name('delete-ride-unavaliable-date');
+    });
+
     
 
     // admin settings route

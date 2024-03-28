@@ -425,7 +425,7 @@ class UserController extends Controller
         catch (ModelNotFoundException $e) 
         {
             return response()->json([
-                'message' => 'Failed to find specified wishlist ID' , // General message first
+                'message' => 'Failed to find specified wishlist ID' , // error message
             ], 422);
         }
         
